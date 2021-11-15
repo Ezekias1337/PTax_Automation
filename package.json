@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Ezekias1337/Selenium_Practice/issues"
   },
-  "homepage": "https://github.com/Ezekias1337/Selenium_Practice#readme"
+  "homepage": "https://github.com/Ezekias1337/Selenium_Practice#readme",
+  "dependencies": {
+    "selenium-webdriver": "^4.0.0"
+  }
 }
