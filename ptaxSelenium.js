@@ -677,6 +677,7 @@ async function laCountyConfirmPayment(arrayOfParcels) {
     await driver.manage().window().setRect({ width: 1920, height: 1080 });
 
     await driver.get("https://vcheck.ttc.lacounty.gov/index.php");
+    // MUST SCROLL DOWN AND CLICK CAPTCHA BOX, THEN SCRIPT WILL RUN REST AUTONOMOUSLY
     await driver.wait(until.urlContains("page=selections"));
     await driver.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/div/table/tbody/tr/td[2]/div/div[1]/div[2]/a[1]/div/span"))
         .click();
