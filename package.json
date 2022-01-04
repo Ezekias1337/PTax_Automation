@@ -18,5 +18,8 @@
   "homepage": "https://github.com/Ezekias1337/Selenium_Practice#readme",
   "dependencies": {
     "selenium-webdriver": "^4.0.0"
+  },
+  "devDependencies": {
+    "html-pdf-chrome": "^0.7.1"
   }
 }
