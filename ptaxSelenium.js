@@ -1,6 +1,7 @@
 const {Builder, By, Key, until} = require ('selenium-webdriver');
 const chrome = require ('selenium-webdriver/chrome');
 const fs = require ('fs');
+const {Driver} = require ('selenium-webdriver/chromium');
 //const options = new chrome.Options()
 
 function generateDelayNumber () {
@@ -1634,27 +1635,392 @@ async function confirmPaymentInPTax (arrayOfParcels) {
   }
 }
 
-confirmPaymentInPTax ([
-  '921700005',
-  '921700010',
-  '921700015',
-  '317-820-09-00',
-  '197570-0485-08',
-  '182604-9082-08',
-  '28042400200100',
-  '28042400200102',
-  '28042400203800',
-  '04-011104',
-  '04-011139',
-  '04-011090',
-  '04-011066',
-  '09-007792',
-  '003 003',
-  '003 003 014',
-  '003 010 005',
-  '003 045 003',
-  '003 054',
-  '004 010 001',
-  '004 018 003',
-  '004 022',
+async function pullClarkCountyAssessmentNotices (arrayOfParcels) {
+  let driver = await new Builder ().forBrowser ('chrome').build ();
+  await driver.get (
+    'https://maps.clarkcountynv.gov/assessor/AssessorParcelDetail/pcl.aspx'
+  );
+
+  /* const body = await driver.findElement(By.css("body"));
+  await body.sendKeys(Key.CONTROL, "p"); */
+  driver.window.print ();
+
+  await driver.sleep (15000);
+}
+
+//pullClarkCountyAssessmentNotices();
+
+async function clarkCounty1stInstallment (arrayOfParcels) {
+  let driver = await new Builder ().forBrowser ('chrome').build ();
+  await driver.manage ().window ().fullscreen ();
+  await driver.get ('https://ptax.ptaxsolution.com/Default.aspx');
+
+  const arrayOfSuccessfulParcels = [];
+  const arrayOfFailedParcels = [];
+
+  await driver.findElement (By.name ('txtUserName')).sendKeys ('fedwards');
+  await driver
+    .findElement (By.name ('txtPassword'))
+    .sendKeys ('p@ssw0rd', Key.RETURN);
+  await driver.wait (until.urlIs ('https://ptax.ptaxsolution.com/MainTC.aspx'));
+  const pTaxWindow = await driver.getWindowHandle ();
+  await driver.sleep (5000);
+
+  await driver.switchTo ().newWindow ('tab');
+  const treasurerWindow = await driver.getWindowHandle ();
+  await driver.sleep (5000);
+
+  let nonConstIndex = 0;
+
+  for (const [index, item] of arrayOfParcels.entries ()) {
+    try {
+      console.log("INDEX", nonConstIndex)
+      await driver.switchTo ().window (treasurerWindow);
+      await driver.get (
+        'https://cookcountytreasurer.com/setsearchparameters.aspx'
+      );
+      const parcelNumberSplit = item.split ('-');
+      const parcelInputField1 = await driver.findElement (
+        By.id ('ContentPlaceHolder1_ASPxPanel1_SearchByPIN1_txtPIN1')
+      );
+      const parcelInputField2 = await driver.findElement (
+        By.id ('ContentPlaceHolder1_ASPxPanel1_SearchByPIN1_txtPIN2')
+      );
+      const parcelInputField3 = await driver.findElement (
+        By.id ('ContentPlaceHolder1_ASPxPanel1_SearchByPIN1_txtPIN3')
+      );
+      const parcelInputField4 = await driver.findElement (
+        By.id ('ContentPlaceHolder1_ASPxPanel1_SearchByPIN1_txtPIN4')
+      );
+      const parcelInputField5 = await driver.findElement (
+        By.id ('ContentPlaceHolder1_ASPxPanel1_SearchByPIN1_txtPIN5')
+      );
+
+      console.log (item);
+
+      await parcelInputField1.sendKeys (parcelNumberSplit[0].toString ());
+      await parcelInputField2.sendKeys (parcelNumberSplit[1].toString ());
+      await parcelInputField3.sendKeys (parcelNumberSplit[2].toString ());
+      await parcelInputField4.sendKeys (parcelNumberSplit[3].toString ());
+      await parcelInputField5.sendKeys (parcelNumberSplit[4].toString ());
+
+      //wait for recaptcha to be completed
+      await driver.wait (until.urlContains ('taxoverviewresults'));
+      console.log ('captcha completed successfuly!');
+      await driver.sleep (5000);
+
+      const currentAmountDueTableElement = await driver.findElements (
+        By.className (
+          'overviewpaymentsinstallment1balancedue'
+        )
+      );
+      const currentAmountDueStringArray = await currentAmountDueTableElement[0].findElements (
+        By.className ('overviewpaymentsdatavalue')
+      );
+      const currentAmountDueStringElement = currentAmountDueStringArray[0];
+      const currentAmountDueString = await currentAmountDueStringElement.getAttribute (
+        'innerText'
+      );
+
+      const currentAmountDueDollarSignRemoved = currentAmountDueString.replace (
+        '$',
+        ''
+      );
+      const currentAmountStringFinal = currentAmountDueDollarSignRemoved.replace (
+        ',',
+        ''
+      );
+      console.log ('currentAmountStringFinal', currentAmountStringFinal);
+      if (currentAmountStringFinal === '0.00') {
+        console.log ('there is no bill for this parcel');
+        console.log (`${item} was unsuccessful!`);
+        arrayOfFailedParcels.push (item);
+
+        console.log("nonConstIndex", nonConstIndex)
+
+        //Wait for the new window or tab
+        await driver.wait (
+          async () => (await driver.getAllWindowHandles ()).length === 3,
+          10000
+        );
+
+        //Loop through until we find a new window handle
+        const windows = await driver.getAllWindowHandles ();
+        const errorWindow = windows[2];
+        await driver.switchTo().window(errorWindow);
+        await driver.close();
+        await driver.switchTo().window(treasurerWindow);
+
+        continue;
+      }
+
+      const downloadYourTaxBillElement = await driver.findElement (
+        By.id (
+          'ContentPlaceHolder1_DataViewNavigationDesktop1_ASPxMenu1_DXI1_T'
+        )
+      );
+      await downloadYourTaxBillElement.click ();
+
+      /* await driver.wait (
+        until.urlIs (
+          'https://cookcountytreasurer.com/requestaduplicatetaxbillresults.aspx'
+        )
+      ); */
+      await driver.sleep (5000);
+
+      console.log ('looking for download link...');
+      const download2021FirstInstallmentElement = await driver.findElement (
+        By.xpath (
+          '/html/body/form/div[4]/div/div/div/div[4]/div[2]/div/div[1]/div/div/div[2]/div/div[2]/div/a[2]'
+        )
+      );
+      await download2021FirstInstallmentElement.click ();
+
+
+      console.log ('file downloaded');
+
+      //now need to reset back to overview - payments tab to ensure script keeps running
+      const overviewPaymentsTab = await driver.findElement (
+        By.xpath (
+          '/html/body/form/div[4]/div/div/div/div[2]/div[1]/div/div/ul/li[1]/a'
+        )
+      );
+      await overviewPaymentsTab.click ();
+
+      await driver.sleep (5000);
+      await driver.switchTo ().window (pTaxWindow);
+
+      let fileNameToUpload = '';
+
+      if (index >= 1) {
+        fileNameToUpload = `CookCountyPropertyTaxBill2021FirstInstallment (${nonConstIndex}).pdf`;
+      } else {
+        fileNameToUpload = 'CookCountyPropertyTaxBill2021FirstInstallment.pdf';
+      }
+
+      await driver.switchTo ().defaultContent ();
+
+      const parcelSearchBarPTAX = await driver.findElement (
+        By.id ('txtSearchParcel')
+      );
+      await parcelSearchBarPTAX.sendKeys (Key.CONTROL, 'a', Key.DELETE);
+      await parcelSearchBarPTAX.sendKeys (item, Key.ENTER);
+
+      await driver.switchTo ().frame (0);
+      await driver.wait (
+        until.elementLocated (By.xpath (`//a[contains(text(), '${item}')]`))
+      );
+      const parcelToEdit = await driver.findElement (
+        By.xpath (`//a[contains(text(), '${item}')]`)
+      );
+      await parcelToEdit.click ();
+
+      await driver.switchTo ().defaultContent ();
+
+      // Store the web element
+      const iframe = driver.findElement (By.css ('#fmeMain'));
+      // Switch to the frame
+      await driver.switchTo ().frame (iframe);
+
+      const taxBillDrivenTab = await driver.findElement (
+        By.id ('licontainer2')
+      );
+      await taxBillDrivenTab.click ();
+
+      const assessmentToEdit = await driver.findElement (
+        By.xpath (`//a[contains(text(), "1/1/2021")]`)
+      );
+      await assessmentToEdit.click ();
+
+      await driver.sleep (2000);
+
+      const dataSourceSelectWrapper = await driver.findElement (
+        By.name ('ddDataSourceAssessment')
+      );
+
+      const dataSourceElement = await dataSourceSelectWrapper.findElement (
+        By.xpath (`//option[contains(text(), "Estimate")]`)
+      );
+      await dataSourceElement.click ();
+
+      const saveDataSourceBtn = await driver.findElement (
+        By.name ('btnSaveAssessment')
+      );
+      await saveDataSourceBtn.click ();
+      await driver.sleep (3000);
+
+      const pTaxTotalAmtLiabilityElement = await driver.findElement (
+        By.id ('tbTotalTaxLiability')
+      );
+      await pTaxTotalAmtLiabilityElement.sendKeys (currentAmountStringFinal);
+
+      const saveAssessmentBTN = await driver.findElement (
+        By.id ('btnSaveLiability')
+      );
+      await saveAssessmentBTN.click ();
+
+      await driver.sleep (5000);
+
+      const generatePaymentsBtn = await driver.findElement (
+        By.id ('btnGeneratePayments')
+      );
+      await generatePaymentsBtn.click ();
+
+      await driver.wait (
+        until.elementLocated (By.name ('tbBasePaymentAmount2'))
+      );
+
+      //now delete 2nd payment
+      const ptaxFinalPaymentEle = await driver.findElement (
+        By.name ('tbBasePaymentAmount2')
+      );
+      await ptaxFinalPaymentEle.sendKeys (Key.CONTROL, 'a', Key.DELETE);
+
+      const ptaxBasePaymentele = await driver.findElement (
+        By.name ('tbBaseAmountTransmittal2')
+      );
+      await ptaxBasePaymentele.sendKeys (Key.CONTROL, 'a', Key.DELETE);
+
+      const secondPaymentDueByEle = await driver.findElement (
+        By.name ('dpBasePaymentDueByDate2$dateInput')
+      );
+      await secondPaymentDueByEle.sendKeys (Key.CONTROL, 'a', Key.DELETE);
+
+      await driver.sleep (2000);
+
+      const savePaymentsBtn = await driver.findElement (
+        By.id ('btnSaveALLPayment')
+      );
+      await savePaymentsBtn.click ();
+
+      await driver.sleep (3000);
+
+      //Now it's time to upload pdf of the assessment
+      await driver.switchTo ().defaultContent ();
+
+      //Click on document element in navbar
+      const documentTabOfNavbar = await driver.findElement (
+        By.xpath ('/html/body/form/div[4]/div/ul/li[4]/a/span')
+      );
+      await documentTabOfNavbar.click ();
+
+      //wait until the upload document dropdown is interactable, then click
+      await driver.sleep (5000);
+      const newDocumentElement = await driver.findElement (
+        By.xpath ('/html/body/form/div[4]/div/ul/li[4]/div/ul/li[9]/a/span')
+      );
+      driver.wait (until.elementIsEnabled (newDocumentElement));
+      await newDocumentElement.click ();
+
+      //Click reserve button
+      await driver.switchTo ().frame (iframe);
+      const reserveButton = await driver.findElement (By.id ('UploadBtn'));
+      await reserveButton.click ();
+
+      //For selenium to upload file you have to sendkeys of the filename, declaring part of string to concat in string literal below
+      const baseFilePath = 'C:/Users/frank.edwards/Downloads/';
+
+      //Click upload file button
+      await driver.wait (until.elementLocated (By.id ('Image1')));
+      const chooseFileButton = await driver.findElement (By.id ('Image1'));
+      await chooseFileButton.sendKeys (`${baseFilePath + fileNameToUpload}`);
+
+      //Select correct assessment year from dropdown
+      const assessmentInputElement = await driver.findElement (
+        By.xpath (
+          '/html/body/form/div[3]/div/table[2]/tbody/tr[5]/td[2]/select'
+        )
+      );
+      let correctAssessmentElement;
+      const assessmentInputElementChildren = await assessmentInputElement.findElements (
+        By.css ('option')
+      );
+
+      for (const itemNestedNested of assessmentInputElementChildren) {
+        const itemNestedNestedInnerText = await itemNestedNested.getAttribute (
+          'innerText'
+        );
+        if (itemNestedNestedInnerText.includes ('| 2021 | ANN')) {
+          correctAssessmentElement = itemNestedNested;
+        }
+      }
+      await correctAssessmentElement.click ();
+
+      await driver.wait (
+        until.elementLocated (
+          By.xpath (`//option[contains(text(), "Bill #1 - | 2021 |")]`)
+        )
+      );
+
+      const correctTaxLiabilityElement = await driver.findElement (
+        By.xpath (`//option[contains(text(), "Bill #1 - | 2021 |")]`)
+      );
+      await correctTaxLiabilityElement.click ();
+
+      await driver.sleep (5000);
+
+      //Set Name of file before uploading to server
+      const titleElement = await driver.findElement (By.id ('fileTitle'));
+      await titleElement.sendKeys (`Online Annual: ${item} Tax Bill`);
+
+      //Save file to server
+      await driver.sleep (5000);
+      const documentSaveButton = await driver.findElement (By.id ('UploadBtn'));
+      await documentSaveButton.click ();
+
+      await driver.sleep (5000);
+
+      console.log (`${item} was successful!`);
+      arrayOfSuccessfulParcels.push (item);
+      nonConstIndex++;
+    } catch (error) {
+      console.log (`${item} was unsuccessful!`);
+      console.log (error, error.message);
+      arrayOfFailedParcels.push (item);
+      await driver.sleep (5000);
+      await driver.switchTo ().defaultContent ();
+    }
+  }
+  const arrayOfParcelsBillsStringified = JSON.stringify (
+    arrayOfSuccessfulParcels
+  );
+  const failedParcelsStringified = JSON.stringify (arrayOfFailedParcels);
+
+  if (arrayOfParcelsBillsStringified !== '[]') {
+    fs.writeFileSync ('successfulBills.json', arrayOfParcelsBillsStringified);
+  }
+  if (failedParcelsStringified !== '[]') {
+    fs.writeFileSync ('failedParcels.json', failedParcelsStringified);
+  }
+}
+
+clarkCounty1stInstallment ([
+  '17-08-444-027-0000',
+  '17-08-444-028-0000',
+  '17-08-445-016-0000',
+  '17-10-401-007-0000',
+  '18-35-302-003-0000',
+  '17-16-101-022-0000',
+  '17-16-101-023-0000',
+  '17-16-101-024-0000',
+  '17-16-102-026-0000',
+  '17-16-102-027-0000',
+  '17-16-102-028-0000',
+  '17-16-102-029-0000',
+  '14-17-405-003-0000',
+  '14-17-405-006-0000',
+  '14-17-405-007-0000',
+  '14-17-405-008-0000',
+  '14-17-405-011-0000',
+  '14-17-406-001-0000',
+  '14-17-406-003-0000',
+  '14-17-406-004-0000',
+  '14-17-406-011-0000',
+  '14-17-406-012-0000',
+  '14-17-406-014-0000',
+  '10-09-411-074-0000',
+  '10-09-411-076-0000',
+  '10-09-411-078-0000',
+  '10-09-411-085-0000',
+  '10-09-411-073-0000',
 ]);
