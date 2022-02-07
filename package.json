@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Ezekias1337/Selenium_Practice#readme",
   "dependencies": {
+    "request": "^2.88.2",
     "selenium-webdriver": "^4.0.0"
   },
   "devDependencies": {
