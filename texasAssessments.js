@@ -2,7 +2,14 @@ const {Builder, By, Key, until} = require ('selenium-webdriver');
 const chrome = require ('selenium-webdriver/chrome');
 const {usernameHidden, passwordHidden} = require ('./credentials');
 const htmlPdf = require ('html-pdf-chrome');
+const fs = require ('fs');
 //const options = new chrome.Options()
+
+/* 
+    NEED TO FIX CREDENTIALS IMPORT
+    NEED TO ADD A FILE FOR CHOOSING DEFAULT DOWNLOAD LOCATION (printPageToPDF)
+    NEED TO IMPORT SWAP TO DEFAULT CONTENT FUNCTION TO OTHER FRAME SWAP FUNCTIONS
+*/
 
 function generateDelayNumber () {
   const amountToSleep = Math.floor (
