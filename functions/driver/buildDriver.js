@@ -4,4 +4,4 @@ const buildDriver = async () => {
   return driver;
 };
 
-module.exports = {buildDriver};
+module.exports = buildDriver;

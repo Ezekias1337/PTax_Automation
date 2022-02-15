@@ -3,4 +3,4 @@ const saveWindowHandle = async driver => {
   return windowHandleToSave;
 };
 
-module.exports = {saveWindowHandle};
+module.exports = saveWindowHandle;

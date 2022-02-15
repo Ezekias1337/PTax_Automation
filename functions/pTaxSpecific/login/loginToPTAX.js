@@ -11,4 +11,4 @@ const loginToPTAX = async (username, password) => {
   return [ptaxWindow, driver];
 };
 
-module.exports = {loginToPTAX};
+module.exports = loginToPTAX;

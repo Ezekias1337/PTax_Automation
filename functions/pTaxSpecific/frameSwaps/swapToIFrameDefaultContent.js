@@ -5,4 +5,4 @@ const swapToIFrameDefaultContent = async driver => {
   );
 };
 
-module.exports = {swapToIFrameDefaultContent};
+module.exports = swapToIFrameDefaultContent;

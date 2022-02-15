@@ -5,4 +5,4 @@ const reserveNewDocument = async (driver, iframe) => {
     await reserveButton.click ();
 };
 
-module.exports = {reserveNewDocument};
+module.exports = reserveNewDocument;

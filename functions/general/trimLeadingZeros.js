@@ -3,4 +3,4 @@ const trimLeadingZeros = async (stringToTrim) => {
     return stringWithZerosTrimmed
 };
 
-module.exports = {trimLeadingZeros};
+module.exports = trimLeadingZeros;

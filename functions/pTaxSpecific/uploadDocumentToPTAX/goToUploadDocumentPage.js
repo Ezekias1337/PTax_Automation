@@ -16,4 +16,4 @@ const goToUploadDocumentPage = async (driver) => {
   await newDocumentElement.click ();
 };
 
-module.exports = {goToUploadDocumentPage};
+module.exports = goToUploadDocumentPage;

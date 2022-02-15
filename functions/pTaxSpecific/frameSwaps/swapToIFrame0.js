@@ -4,4 +4,4 @@ const swapToIFrame0 = async driver => {
   console.log ('Successfully switched to frame 0(where properties are listed)');
 };
 
-module.exports = {swapToIFrame0};
+module.exports = swapToIFrame0;

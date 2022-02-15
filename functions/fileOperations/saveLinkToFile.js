@@ -15,4 +15,4 @@ const saveLinkToFile = async driver => {
     );
 };
 
-module.exports = {saveLinkToFile};
+module.exports = saveLinkToFile;

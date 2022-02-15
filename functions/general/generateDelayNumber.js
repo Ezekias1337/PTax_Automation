@@ -6,4 +6,4 @@ const generateDelayNumber = () => {
   return amountToSleep;
 };
 
-module.exports = {generateDelayNumber};
+module.exports = generateDelayNumber;

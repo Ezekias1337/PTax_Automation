@@ -7,4 +7,4 @@ const swapToIFrame1 = async driver => {
   console.log ('Successfully switched to frame 1(right hand side of ui)');
 };
 
-module.exports = {swapToIFrame1};
+module.exports = swapToIFrame1;

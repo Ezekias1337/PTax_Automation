@@ -4,4 +4,4 @@ const printFailedOperationsToFile = async (driver, arrayOfFailedOperations) => {
     
 };
 
-module.exports = {printFailedOperationsToFile};
+module.exports = printFailedOperationsToFile;

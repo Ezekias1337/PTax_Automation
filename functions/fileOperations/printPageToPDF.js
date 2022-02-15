@@ -17,4 +17,4 @@ const printPageToPDF = async (driver, outputFilename) => {
   console.log ('File saved!');
 };
 
-module.exports = {printPageToPDF};
+module.exports = printPageToPDF;

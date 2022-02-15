@@ -4,4 +4,4 @@ const printSuccessfulOperationsToFile = async (driver, arrayOfSuccessfulOperatio
     
 };
 
-module.exports = {printSuccessfulOperationsToFile};
+module.exports = printSuccessfulOperationsToFile;

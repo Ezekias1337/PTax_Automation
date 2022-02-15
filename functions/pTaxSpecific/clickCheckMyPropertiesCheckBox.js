@@ -5,4 +5,4 @@ let checkBox = await driver.wait (
     await driver.findElement (By.id ('CheckMyProperties')).click ();
 };
 
-module.exports = {clickCheckMyPropertiesCheckBox};
+module.exports = clickCheckMyPropertiesCheckBox;
