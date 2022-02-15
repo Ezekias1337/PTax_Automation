@@ -1,3 +1,7 @@
+const testFunction = require("../../testFunction");
+
+
+
 const listOfAutomations = {
   assessmentNotices: {
     key: 1,
@@ -6,19 +10,19 @@ const listOfAutomations = {
       {
         key: 1,
         state: "Nevada",
-        subLocations: [{ key: 1, name: "Clark County" }],
+        subLocations: [{ key: 1, name: "Clark County", function: testFunction }],
       },
       {
         key: 2,
         state: "New York",
-        subLocations: [{ key: 1, name: "New York" }],
+        subLocations: [{ key: 1, name: "New York", function: testFunction }],
       },
     ],
   },
   changeMailingAddress: {
     key: 2,
     name: "Change Mailing Address",
-    locations: [{ key: 1, state: "", subLocations: [] }],
+    /* locations: [{ key: 1, state: "", subLocations: [] }], */
   },
   checkRequests: {
     key: 3,

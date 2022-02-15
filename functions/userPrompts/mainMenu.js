@@ -58,6 +58,7 @@ const mainMenu = async () => {
         selectedSublocationInput
       );
       console.log(`Running automation for: ${selectedSublocation.name}`);
+      selectedSublocation.function();
     }
   }
 };

@@ -1,0 +1,3 @@
+    - Need to add ability to test function with one point of data before running for 
+whole data set, so person can review the accuracy before proceeding.
+    - Need to add ability to 
