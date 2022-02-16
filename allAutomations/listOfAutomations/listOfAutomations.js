@@ -1,6 +1,12 @@
-const testFunction = require("../../testFunction");
-
-
+const assessmentNotices = require("../assessmentNotices/assessmentNotices");
+const changeMailingAddress = require("../changeMailingAddress/changeMailingAddresses");
+const checkRequests = require("../checkRequests/checkRequests");
+const checkAssessorURLs = require("../checkURLs/checkAssessorURLs");
+const checkCollectorURLs = require("../checkURLs/checkCollectorURLs");
+const paymentConfirmations = require("../paymentConfirmations/paymentConfirmations");
+const propertyPointOfContact = require("../propertyPointOfContact/propertyPointOfContact");
+const pullParcelInformationFromRealquest = require("../pullParcelInformationFromRealquest/pullParcelInformationFromRealquest");
+const taxBills = require("../taxBills/taxBills");
 
 const listOfAutomations = {
   assessmentNotices: {
@@ -10,12 +16,16 @@ const listOfAutomations = {
       {
         key: 1,
         state: "Nevada",
-        subLocations: [{ key: 1, name: "Clark County", function: testFunction }],
+        subLocations: [
+          { key: 1, name: "Clark County", function: assessmentNotices },
+        ],
       },
       {
         key: 2,
         state: "New York",
-        subLocations: [{ key: 1, name: "New York", function: testFunction }],
+        subLocations: [
+          { key: 1, name: "New York", function: assessmentNotices },
+        ],
       },
     ],
   },
@@ -36,18 +46,20 @@ const listOfAutomations = {
         key: 1,
         state: "California",
         subLocations: [
-          { key: 1, name: "Los Angeles" },
-          { key: 2, name: "Orange County" },
-          { key: 3, name: "Riverside County" },
-          { key: 4, name: "San Bernardino" },
-          { key: 5, name: "San Diego" },
-          { key: 4, name: "Ventura County" },
+          { key: 1, name: "Los Angeles", function: paymentConfirmations },
+          { key: 2, name: "Orange County", function: paymentConfirmations },
+          { key: 3, name: "Riverside County", function: paymentConfirmations },
+          { key: 4, name: "San Bernardino", function: paymentConfirmations },
+          { key: 5, name: "San Diego", function: paymentConfirmations },
+          { key: 4, name: "Ventura County", function: paymentConfirmations },
         ],
       },
       {
         key: 2,
         state: "Pennsylvania",
-        subLocations: [{ key: 1, name: "Multnomah County" }],
+        subLocations: [
+          { key: 1, name: "Multnomah County", function: paymentConfirmations },
+        ],
       },
     ],
   },
@@ -62,17 +74,19 @@ const listOfAutomations = {
       {
         key: 1,
         state: "California",
-        subLocations: [{ key: 1, name: "Los Angeles [No Data Entry]" }],
+        subLocations: [
+          { key: 1, name: "Los Angeles [No Data Entry]", function: taxBills },
+        ],
       },
       {
         key: 2,
         state: "New York",
-        subLocations: [{ key: 1, name: "New York" }],
+        subLocations: [{ key: 1, name: "New York", function: taxBills }],
       },
       {
         key: 3,
         state: "Illinois",
-        subLocations: [{ key: 1, name: "Cook County" }],
+        subLocations: [{ key: 1, name: "Cook County", function: taxBills }],
       },
     ],
   },
@@ -87,6 +101,10 @@ const listOfAutomations = {
   checkTaxCollectorWebsiteURLs: {
     key: 9,
     name: "Check all the links for Tax Collectors",
+  },
+  pullParcelInformationFromRealquest: {
+    key: 10,
+    name: "Pull parcel information from Realquest",
   },
 };
 

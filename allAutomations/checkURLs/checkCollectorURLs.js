@@ -1,12 +1,12 @@
 const buildDriver = require("../../functions/driver/buildDriver");
 
-const checkRequests = async (sublocation) => {
+const checkCollectorURLs = async () => {
     /* 
         Need to pick automation by using sublocation
     */
 
     const driver = await buildDriver;
-    console.log(`Running check request automation for: ${sublocation}`);
+    console.log(`Running check Tax Collector URL automation: `);
 };
 
-module.exports = checkRequests;
+module.exports = checkCollectorURLs;
