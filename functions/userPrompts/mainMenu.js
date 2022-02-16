@@ -5,7 +5,6 @@ const consoleLogLine = require("../general/consoleLogLine");
 const promptSelectAnAutomation = require("./individual/promptSelectAnAutomation");
 const promptForState = require("./individual/promptForState");
 const promptForSublocation = require("./individual/promptForSublocation");
-const prompt = require("prompt-sync")();
 const listOfAutomations = require("../../allAutomations/listOfAutomations/listOfAutomations");
 
 const mainMenu = async () => {
@@ -57,8 +56,7 @@ const mainMenu = async () => {
         objToArraySelectSublocation,
         selectedSublocationInput
       );
-      console.log(`Running automation for: ${selectedSublocation.name}`);
-      selectedSublocation.function();
+      selectedSublocation.function(selectedSublocation.name);
     }
   }
 };
