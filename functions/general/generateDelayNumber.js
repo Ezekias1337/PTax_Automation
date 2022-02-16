@@ -1,3 +1,5 @@
+const colors = require('colors');
+
 const generateDelayNumber = () => {
   const amountToSleep = Math.floor (
     Math.random () * (25000 - 13000 + 1) + 13000

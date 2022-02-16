@@ -1,3 +1,5 @@
+const colors = require('colors');
+
 const swapToIFrame0 = async driver => {
   await swapToIFrameDefaultContent (driver);
   await driver.switchTo ().frame (0);
