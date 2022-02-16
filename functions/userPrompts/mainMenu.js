@@ -1,3 +1,4 @@
+const colors = require('colors');
 const findOptionByKey = require("./parsing/findOptionByKey");
 const parseNestedObjectMainMenu = require("./parsing/parseNestedObjectMainMenu");
 const parseObjectMainMenu = require("./parsing/parseObjectMainMenu");
@@ -44,7 +45,11 @@ const mainMenu = async () => {
       If the state has a list of sublocations, prompt the user
     */
 
-    if (selectedState?.subLocations?.length > 0) {
+    if (selectedAutomation?.WIP === true) {
+      console.log(
+        "This automation has not yet been added, but is planned for the future."
+      );
+    } else if (selectedState?.subLocations?.length > 0) {
       const objToArraySelectSublocation = parseObjectMainMenu(
         selectedState.subLocations,
         "city"
@@ -58,8 +63,6 @@ const mainMenu = async () => {
       );
       selectedSublocation.function(selectedSublocation.name);
     }
-  } else if (selectedAutomation?.WIP === true) {
-    console.log("This automation has not yet been added, but is planned for the future.")
   }
 };
 

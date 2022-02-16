@@ -1,3 +1,5 @@
+const colors = require('colors');
+
 const swapToIFrame1 = async driver => {
   await swapToIFrameDefaultContent (driver);
   // Store the web element

@@ -1,3 +1,4 @@
+const colors = require('colors');
 const prompt = require("prompt-sync")();
 
 const promptLogin = async () => {

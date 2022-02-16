@@ -1,4 +1,6 @@
 const htmlPdf = require ('html-pdf-chrome');
+const colors = require('colors');
+
 
 const printPageToPDF = async (driver, outputFilename) => {
   const DEFAULT_PRINT_PATH =
