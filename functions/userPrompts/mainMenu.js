@@ -58,6 +58,8 @@ const mainMenu = async () => {
       );
       selectedSublocation.function(selectedSublocation.name);
     }
+  } else if (selectedAutomation?.WIP === true) {
+    console.log("This automation has not yet been added, but is planned for the future.")
   }
 };
 
