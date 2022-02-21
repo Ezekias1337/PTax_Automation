@@ -6,7 +6,7 @@ const updateParcelNames = async () => {
         Need to pick automation by using sublocation
     */
 
-  const driver = await buildDriver;
+  const driver = await buildDriver();
   console.log(`Running update parcel automation: `);
 };
 

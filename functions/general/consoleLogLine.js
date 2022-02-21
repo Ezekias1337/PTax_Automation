@@ -1,9 +1,11 @@
-const colors = require('colors');
+const colors = require("colors");
 
 const consoleLogLine = () => {
   console.log("\n");
   console.log(
-    "-------------------------------------------------------------------------------------------".blue.bold
+    colors.yellow.bold(
+      "-------------------------------------------------------------------------------------------"
+    )
   );
   console.log("\n");
 };

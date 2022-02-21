@@ -93,23 +93,28 @@ const listOfAutomations = {
       },
     ],
   },
-  updateParcelNames: {
+  addNewParcels: {
     key: 7,
+    name: "Add New Parcels",
+    WIP: true
+  },
+  updateParcelNames: {
+    key: 8,
     name: "Update Parcel Names",
     WIP: true
   },
   checkAssessorWebsiteURLs: {
-    key: 8,
+    key: 9,
     name: "Check all the links for Assessors",
     WIP: true
   },
   checkTaxCollectorWebsiteURLs: {
-    key: 9,
+    key: 10,
     name: "Check all the links for Tax Collectors",
     WIP: true
   },
   pullParcelInformationFromRealquest: {
-    key: 10,
+    key: 11,
     name: "Pull parcel information from Realquest",
     WIP: true
   },

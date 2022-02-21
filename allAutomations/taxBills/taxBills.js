@@ -5,7 +5,7 @@ const taxBills = async (sublocation) => {
         Need to pick automation by using sublocation
     */
 
-    const driver = await buildDriver;
+    const driver = await buildDriver();
 };
 
 module.exports = taxBills;
