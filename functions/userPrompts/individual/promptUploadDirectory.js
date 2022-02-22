@@ -12,7 +12,7 @@ const filePathIsRelative = require("../../general/consoleLogErrors/filePathIsRel
 const promptUploadOrScanDirectory = async () => {
   console.log("\n");
   console.log(
-    colors.yellow.bold("This automation requires uploading files to PTax.")
+    colors.yellow.bold("This automation requires uploading or scanning files.")
   );
   console.log("\n");
   console.log(

@@ -3,7 +3,7 @@ const consoleLogLine = require("../consoleLogLine");
 const closingAutomationSystem = require("../closingAutomationSystem");
 const incorrectFilePathWarning = require("./incorrectFilePathWarning");
 
-const filePathIncludesSpaces = () => {
+const filePathIncludesSpaces = async () => {
   consoleLogLine();
 
   console.log(
@@ -31,7 +31,7 @@ const filePathIncludesSpaces = () => {
   incorrectFilePathWarning();
   console.log("\n");
 
-  closingAutomationSystem();
+  await closingAutomationSystem();
 
   consoleLogLine();
   return;

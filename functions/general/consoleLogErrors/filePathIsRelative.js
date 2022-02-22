@@ -3,7 +3,7 @@ const consoleLogLine = require("../consoleLogLine");
 const closingAutomationSystem = require("../closingAutomationSystem");
 const incorrectFilePathWarning = require("./incorrectFilePathWarning");
 
-const filePathIsRelative = () => {
+const filePathIsRelative = async () => {
   consoleLogLine();
 
   console.log(
@@ -27,7 +27,7 @@ const filePathIsRelative = () => {
   incorrectFilePathWarning();
   console.log("\n");
 
-  closingAutomationSystem();
+  await closingAutomationSystem();
 
   consoleLogLine();
   return;
