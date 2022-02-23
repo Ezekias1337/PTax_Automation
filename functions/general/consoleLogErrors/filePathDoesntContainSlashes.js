@@ -29,7 +29,6 @@ const filePathDoesntContainSlashes = async () => {
 
   await closingAutomationSystem();
 
-  consoleLogLine();
   return;
 };
 

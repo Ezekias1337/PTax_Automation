@@ -29,7 +29,6 @@ const filePathIsRelative = async () => {
 
   await closingAutomationSystem();
 
-  consoleLogLine();
   return;
 };
 

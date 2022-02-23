@@ -18,7 +18,7 @@ const readSpreadsheetFile = async () => {
     uploadDirectory = uploadDirectoryPreSlashCheck + "\\";
   }
 
-  const fileName = await promptFileName(uploadDirectory);
+  const fileName = await promptFileName(uploadDirectory, "xlsx");
   const fileNameConcatenated = uploadDirectory.concat(fileName);
   const fileNameBackSlashesSwapped = fileNameConcatenated.replace(/\\/g, "/");
   console.log("\n");

@@ -33,7 +33,6 @@ const filePathIncludesSpaces = async () => {
 
   await closingAutomationSystem();
 
-  consoleLogLine();
   return;
 };
 
