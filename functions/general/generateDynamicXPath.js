@@ -3,14 +3,14 @@ const colors = require("colors");
 const generateDynamicXPath = (
   elementType,
   textToSearchFor,
-  containOrEquals
+  containsOrEquals
 ) => {
   let xpathToReturn;
 
-  if (containOrEquals === "contains") {
-    xpathToReturn = `//${elementType}[contains(text(), ${textToSearchFor})]`;
-  } else if (containOrEquals === "equals") {
-    xpathToReturn = `//*[text()=${textToSearchFor}]`;
+  if (containsOrEquals === "contains") {
+    xpathToReturn = `//${elementType}[contains(text(), '${textToSearchFor}')]`;
+  } else if (containsOrEquals === "equals") {
+    xpathToReturn = `//*[text()='${textToSearchFor}']`;
   } else {
     xpathToReturn = "failed";
     console.log(

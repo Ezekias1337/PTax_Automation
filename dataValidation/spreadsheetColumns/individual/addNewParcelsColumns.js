@@ -5,6 +5,7 @@ const addNewParcelsColumns = [
   "City",
   "State",
   "Zip",
+  "OwnerOfRecord",
   "DefaultAssessor",
   "DefaultCollector",
   "DefaultPaymentMethod",

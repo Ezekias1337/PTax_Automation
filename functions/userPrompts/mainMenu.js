@@ -1,4 +1,4 @@
-const colors = require('colors');
+const colors = require("colors");
 const findOptionByKey = require("./parsing/findOptionByKey");
 const parseNestedObjectMainMenu = require("./parsing/parseNestedObjectMainMenu");
 const parseObjectMainMenu = require("./parsing/parseObjectMainMenu");
@@ -25,7 +25,8 @@ const mainMenu = async () => {
   );
 
   /* 
-    If the automation has a state to select, prompt the user
+    If the automation has a state to select, prompt the user, 
+    otherwise run the automation
   */
 
   if (selectedAutomation?.locations?.length > 0) {
@@ -63,6 +64,8 @@ const mainMenu = async () => {
       );
       selectedSublocation.function(selectedSublocation.name);
     }
+  } else if (selectedAutomation?.function) {
+    selectedAutomation.function();
   }
 };
 

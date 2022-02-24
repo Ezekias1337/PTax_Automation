@@ -5,12 +5,20 @@ const {
   userNameSelector,
   passWordSelector,
 } = require("./individual/loginPageSelectors");
-const newScannedDocSelector = require("./individual/newScannedDocSelector");
-const paymentsTransmittalCreatorSelector = require("./individual/paymentsTransmittalCreatorSelector");
 const searchByAddressSelector = require("./individual/searchByAddressSelector");
 const searchByLocationSelector = require("./individual/searchByLocationSelector");
 const searchByParcelNumberSelector = require("./individual/searchByParcelNumberSelector");
 const searchByParcelOwnerSelector = require("./individual/searchByParcelOwnerSelector");
+const navbarAppealsSelectors = require("./navbarDropdowns/navbarAppeals/navbarAppealsSelectors");
+const navbarDocumentsSelectors = require("./navbarDropdowns/navbarDocuments/navbarDocumentsSelectors");
+const navbarEditSelectors = require("./navbarDropdowns/navbarEdit/navbarEditSelectors");
+const navbarFileSelectors = require("./navbarDropdowns/navbarFile/navbarFileSelectors");
+const navbarHelpSelectors = require("./navbarDropdowns/navbarHelp/navbarHelpSelectors");
+const navbarLinksSelectors = require("./navbarDropdowns/navbarLinks/navbarLinksSelectors");
+const navbarPaymentsSelectors = require("./navbarDropdowns/navbarPayments/navbarPaymentsSelectors");
+const navbarReportsSelectors = require("./navbarDropdowns/navbarReports/navbarReportsSelectors");
+const navbarViewSelectors = require("./navbarDropdowns/navbarView/navbarViewSelectors");
+const addNewParcelsSelectors = require("./addNewParcelsSelectors/addNewParcelsSelectors");
 
 const allSelectors = {
   addNewAssessmentSelector,
@@ -18,12 +26,20 @@ const allSelectors = {
   editDetailsSelector,
   userNameSelector,
   passWordSelector,
-  newScannedDocSelector,
-  paymentsTransmittalCreatorSelector,
   searchByAddressSelector,
   searchByLocationSelector,
   searchByParcelNumberSelector,
   searchByParcelOwnerSelector,
+  navbarAppealsSelectors,
+  navbarDocumentsSelectors,
+  navbarEditSelectors,
+  navbarFileSelectors,
+  navbarHelpSelectors,
+  navbarLinksSelectors,
+  navbarPaymentsSelectors,
+  navbarReportsSelectors,
+  navbarViewSelectors,
+  addNewParcelsSelectors,
 };
 
 module.exports = allSelectors;

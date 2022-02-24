@@ -1,9 +1,9 @@
-const { until, By } = require("selenium-webdriver");
+const awaitElementLocatedAndReturn = require("../../general/awaitElementLocatedAndReturn");
 const { checkBoxSelector } = require("../../../ptaxXpathsAndSelectors/allSelectors");
 
 const clickCheckMyPropertiesCheckBox = async (driver) => {
-  await driver.wait(until.elementLocated(By.id(checkBoxSelector)));
-  await driver.findElement(By.id(checkBoxSelector)).click();
+  const checkBox = await awaitElementLocatedAndReturn(driver, checkBoxSelector, "id");
+  await checkBox.click();
 };
 
 module.exports = clickCheckMyPropertiesCheckBox;
