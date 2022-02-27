@@ -18,7 +18,7 @@ const readSpreadsheetFile = async () => {
     uploadDirectory = uploadDirectoryPreSlashCheck + "\\";
   }
 
-  console.log("Using file: ", red.green.bold("Ensure the spreadsheet only has one page to work properly."));
+  console.log("Using file: ", colors.green.bold("Ensure the spreadsheet only has one page to work properly."));
   const fileName = await promptFileName(uploadDirectory, "xlsx");
   const fileNameConcatenated = uploadDirectory.concat(fileName);
   const fileNameBackSlashesSwapped = fileNameConcatenated.replace(/\\/g, "/");
