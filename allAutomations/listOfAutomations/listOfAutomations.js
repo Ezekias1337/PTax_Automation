@@ -33,13 +33,13 @@ const listOfAutomations = {
   changeMailingAddress: {
     key: 2,
     name: "Change Mailing Address",
-    WIP: true
+    WIP: true,
     /* locations: [{ key: 1, state: "", subLocations: [] }], */
   },
   checkRequests: {
     key: 3,
     name: "Check Requests",
-    WIP: true
+    WIP: true,
   },
   paymentConfirmations: {
     key: 4,
@@ -69,7 +69,7 @@ const listOfAutomations = {
   propertyPointOfContact: {
     key: 5,
     name: "Property Point of Contact",
-    WIP: true
+    WIP: true,
   },
   taxBills: {
     key: 6,
@@ -93,31 +93,36 @@ const listOfAutomations = {
         subLocations: [{ key: 1, name: "Cook County", function: taxBills }],
       },
     ],
+    operations: [
+      { key: 1, name: "Data Entry" },
+      { key: 2, name: "Download Files" },
+      { key: 3, name: "Data Entry And Download Files" },
+    ],
   },
   addNewParcels: {
     key: 7,
     name: "Add New Parcels",
-    function: addNewParcels
+    function: addNewParcels,
   },
   updateParcelNames: {
     key: 8,
     name: "Update Parcel Names",
-    WIP: true
+    WIP: true,
   },
   checkAssessorWebsiteURLs: {
     key: 9,
     name: "Check all the links for Assessors",
-    WIP: true
+    WIP: true,
   },
   checkTaxCollectorWebsiteURLs: {
     key: 10,
     name: "Check all the links for Tax Collectors",
-    WIP: true
+    WIP: true,
   },
   pullParcelInformationFromRealquest: {
     key: 11,
     name: "Pull parcel information from Realquest",
-    WIP: true
+    WIP: true,
   },
 };
 

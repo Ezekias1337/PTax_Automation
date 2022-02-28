@@ -7,6 +7,7 @@ const promptSelectAnAutomation = require("./individual/promptSelectAnAutomation"
 const promptForState = require("./individual/promptForState");
 const promptForSublocation = require("./individual/promptForSublocation");
 const listOfAutomations = require("../../allAutomations/listOfAutomations/listOfAutomations");
+const promptForOperation = require("./individual/promptForOperation");
 
 const mainMenu = async () => {
   /* 
@@ -19,6 +20,7 @@ const mainMenu = async () => {
   const selectedAutomationInput = await promptSelectAnAutomation();
   consoleLogLine();
 
+  let selectedOperation = null;
   const selectedAutomation = findOptionByKey(
     objToArraySelectAutomation,
     selectedAutomationInput
@@ -43,6 +45,25 @@ const mainMenu = async () => {
     );
 
     /* 
+      If the selected operation has a choice of specific operations, 
+      prompt the user
+    */
+
+    if (selectedAutomation?.operations?.length > 0) {
+      const objToArraySelectOperation = parseObjectMainMenu(
+        selectedAutomation.operations,
+        "operation"
+      );
+      const selectedOperationInput = await promptForOperation();
+      consoleLogLine();
+
+      selectedOperation = findOptionByKey(
+        objToArraySelectOperation,
+        selectedOperationInput
+      );
+    }
+
+    /* 
       If the state has a list of sublocations, prompt the user
     */
 
@@ -62,7 +83,12 @@ const mainMenu = async () => {
         objToArraySelectSublocation,
         selectedSublocationInput
       );
-      selectedSublocation.function(selectedSublocation.name);
+
+      selectedSublocation.function(
+        selectedState.state,
+        selectedSublocation.name,
+        selectedOperation.name
+      );
     }
   } else if (selectedAutomation?.function) {
     selectedAutomation.function();

@@ -5,6 +5,13 @@ const promptFileName = require("../userPrompts/individual/promptFileName");
 const removeQuotesFromObjectKeys = require("../general/removeQuotesFromObjectKeys");
 
 const readSpreadsheetFile = async () => {
+  console.log(
+    "\n",
+    colors.red.bold(
+      "Ensure to remove any rows above the row with the titles of each column. Otherwise, this will not work."
+    )
+  );
+
   const uploadDirectoryPreSlashCheck = await promptUploadOrScanDirectory();
   const slashChecker = uploadDirectoryPreSlashCheck.charAt(
     uploadDirectoryPreSlashCheck.length - 1
@@ -18,7 +25,11 @@ const readSpreadsheetFile = async () => {
     uploadDirectory = uploadDirectoryPreSlashCheck + "\\";
   }
 
-  console.log("Using file: ", colors.green.bold("Ensure the spreadsheet only has one page to work properly."));
+  console.log(
+    colors.green.bold(
+      "Ensure the spreadsheet only has one page to work properly."
+    )
+  );
   const fileName = await promptFileName(uploadDirectory, "xlsx");
   const fileNameConcatenated = uploadDirectory.concat(fileName);
   const fileNameBackSlashesSwapped = fileNameConcatenated.replace(/\\/g, "/");

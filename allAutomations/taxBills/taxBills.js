@@ -1,11 +1,20 @@
-const buildDriver = require("../../functions/driver/buildDriver");
+const newYorkTaxBills = require("./states/newYork/newYorkTaxBills");
 
-const taxBills = async (sublocation) => {
-    /* 
+const taxBills = async (state, city, operation) => {
+  /* 
         Need to pick automation by using sublocation
     */
 
-    const driver = await buildDriver();
+  switch (state) {
+    case "California":
+      // code block
+      break;
+    case "New York":
+      await newYorkTaxBills(state, city, operation);
+      break;
+    default:
+    // code block
+  }
 };
 
 module.exports = taxBills;

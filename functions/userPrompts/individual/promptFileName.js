@@ -9,6 +9,9 @@ const promptFileName = async (uploadDirectory, fileTypeToFilterBy) => {
 
   const filterFileList = (fileTypeToFilterBy, setFilter) => {
     let counter = 1;
+    if(arrayOfFiles.entries().length < 1) {
+      console.log("There are no files in this directory.");
+    }
     for (const [index, item] of arrayOfFiles.entries()) {
       const fileNameSplitByDot = item.split(".");
       if (

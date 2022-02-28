@@ -9,7 +9,7 @@ const verifySpreadSheetColumnNames = (
   rowFromSpreadsheet
 ) => {
   console.log(
-    colors.blue("Verifying that the spreadsheet file has the correct columns"),
+    colors.blue("Verifying that the spreadsheet file has the correct columns."),
     "\n"
   );
 
@@ -23,8 +23,7 @@ const verifySpreadSheetColumnNames = (
     }
   }
 
-  return [areCorrectSheetColumnsPresent, arrayOfMissingColumnNames]
-
+  return [areCorrectSheetColumnsPresent, arrayOfMissingColumnNames];
 };
 
 module.exports = verifySpreadSheetColumnNames;

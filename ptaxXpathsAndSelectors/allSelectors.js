@@ -9,6 +9,7 @@ const searchByAddressSelector = require("./individual/searchByAddressSelector");
 const searchByLocationSelector = require("./individual/searchByLocationSelector");
 const searchByParcelNumberSelector = require("./individual/searchByParcelNumberSelector");
 const searchByParcelOwnerSelector = require("./individual/searchByParcelOwnerSelector");
+const newParcelHeader = require("./individual/newParcelHeader");
 const navbarAppealsSelectors = require("./navbarDropdowns/navbarAppeals/navbarAppealsSelectors");
 const navbarDocumentsSelectors = require("./navbarDropdowns/navbarDocuments/navbarDocumentsSelectors");
 const navbarEditSelectors = require("./navbarDropdowns/navbarEdit/navbarEditSelectors");
@@ -30,6 +31,7 @@ const allSelectors = {
   searchByLocationSelector,
   searchByParcelNumberSelector,
   searchByParcelOwnerSelector,
+  newParcelHeader,
   navbarAppealsSelectors,
   navbarDocumentsSelectors,
   navbarEditSelectors,

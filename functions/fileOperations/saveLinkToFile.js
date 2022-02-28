@@ -1,17 +1,18 @@
-const fs = require ('fs');
+const fs = require("fs");
+const request = require("request");
 
-const saveLinkToFile = async driver => {
-  const anchorTagToDownload = tdWithDownloadLinkAnchorTag[0];
-  const anchorTagToDownloadHREF = await anchorTagToDownload.getAttribute (
-    'href'
-  );
+const saveLinkToFile = async (
+  anchorTag,
+  outputDirectory,
+  fileName,
+  fileExtension
+) => {
+  const anchorTagToDownloadHREF = await anchorTag.getAttribute("href");
 
   await request
-    .get (anchorTagToDownloadHREF)
-    .pipe (
-      fs.createWriteStream (
-        `C:/Users/frank.edwards/Downloads/NY_Assessment_Notices/${item}.pdf`
-      )
+    .get(anchorTagToDownloadHREF)
+    .pipe(
+      fs.createWriteStream(`${outputDirectory}/${fileName}.${fileExtension}`)
     );
 };
 

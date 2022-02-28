@@ -14,12 +14,12 @@ const verifySpreadSheetColumnNames = require("../../functions/fileOperations/ver
 const handleColumnNameLogging = require("../../functions/fileOperations/handleColumnNameLogging");
 const awaitElementLocatedAndReturn = require("../../functions/general/awaitElementLocatedAndReturn");
 const generateDynamicXPath = require("../../functions/general/generateDynamicXPath");
-const printSuccessfulOperationsToFile = require("../../functions/fileOperations/printSuccessfulOperationsToFile");
-const printFailedOperationsToFile = require("../../functions/fileOperations/printFailedOperationsToFile");
+const printAutomationReportToSheet = require("../../functions/fileOperations/printAutomationReportToSheet");
 const {
   searchByLocationSelector,
   navbarEditSelectors,
   addNewParcelsSelectors,
+  newParcelHeader
 } = require("../../ptaxXpathsAndSelectors/allSelectors");
 const sendKeysPTaxInputFields = require("../../functions/pTaxSpecific/sendKeysPTaxInputFields/sendKeysPTaxInputFields");
 const clickNavbarMenu = require("../../functions/pTaxSpecific/clickNavbar/clickNavbarMenu");
@@ -101,7 +101,7 @@ const addNewParcels = async () => {
         // Need to simulate mousehover over this element to dismiss navbar
         const parcelInformationH1 = await awaitElementLocatedAndReturn(
           driver,
-          "h1.page-info-header",
+          newParcelHeader,
           "css"
         );
         await simulateMouseHover(driver, parcelInformationH1);
@@ -289,12 +289,14 @@ const addNewParcels = async () => {
         arrayOfFailedOperations.push(item);
       }
     }
-    await printSuccessfulOperationsToFile(arrayOfSuccessfulOperations);
-    await printFailedOperationsToFile(arrayOfFailedOperations);
+    await printAutomationReportToSheet(
+      arrayOfSuccessfulOperations,
+      arrayOfFailedOperations
+    );
 
     console.log(
       colors.blue.bold(
-        `Reports have been generated for parcels that were added successful and unsuccessfuly, located in the output folder`
+        `Reports have been generated for parcels that were added successful and unsuccessfuly, located in the output folder. Please check the 'Failed Operations' tab to verify if any results need manual review.`
       )
     );
     await closingAutomationSystem();
