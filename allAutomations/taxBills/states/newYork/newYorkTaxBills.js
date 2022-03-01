@@ -43,9 +43,20 @@ const taxWebsiteSelectors = {
   sideMenuTab: "sidemenu",
   propertyTaxBillsTab: `//span[contains(text(), 'Property Tax Bills')]`,
   taxBillTable: "datalet_div_1",
+  bblSearchBtn: "`//a[contains(text(), 'BBL Search')]`",
 };
 const arrayOfSuccessfulOperations = [];
 const arrayOfFailedOperations = [];
+
+const checkIfSessionExpired = async (driver) => {
+  const checkURL = await driver.getCurrentUrl();
+  if (checkURL.includes(".aspx?mode=content/home.htm")) {
+    const bblSearchBtn = await driver.findElement(
+      By.xpath(taxWebsiteSelectors.bblSearchBtn)
+    );
+    await bblSearchBtn.click();
+  }
+};
 
 const checkForTaxBillTable = async (driver) => {
   let continueExecution = false;
@@ -177,6 +188,14 @@ const performDownload = async (state, sublocation, operation) => {
         console.log(
           colors.magenta.bold(`Working on parcel: ${item.ParcelNumber}`)
         );
+
+        /* 
+          If the script has been executing for a long time, the session times out and
+          redirects to the homepage. This checks if this occurred, and if it has,
+          then it will click the BBL Search button to proceed execution
+        */
+
+        await checkIfSessionExpired(driver);
 
         /* 
           Some parcels have leading zeros in the block/lot numbers which cause them
