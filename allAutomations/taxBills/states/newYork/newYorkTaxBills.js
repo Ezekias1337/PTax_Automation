@@ -294,7 +294,8 @@ const performDownload = async (state, sublocation, operation) => {
 
     await printAutomationReportToSheet(
       arrayOfSuccessfulOperations,
-      arrayOfFailedOperations
+      arrayOfFailedOperations,
+      "../../../../output/"
     );
 
     console.log(

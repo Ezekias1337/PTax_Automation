@@ -134,7 +134,8 @@ const checkWebsiteURLs = async () => {
 
   await printAutomationReportToSheet(
     arrayOfSuccessfulOperations,
-    arrayOfFailedOperations
+    arrayOfFailedOperations,
+    "../../output/"
   );
 
   console.log(
