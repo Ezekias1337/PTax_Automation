@@ -253,7 +253,8 @@ const performDownload = async (state, sublocation, operation) => {
         );
         const downloadLinkChild = await driver.findElement(By.xpath(downloadLinkChildXPath))
         const downloadLink = await downloadLinkChild.findElement(By.xpath("./../.."))
-        await saveLinkToFile(downloadLink, outputDirectory, item.ParcelNumber, "pdf");
+        const fileNameForFile = item.CompanyName + item.EntityName + item.ParcelNumber
+        await saveLinkToFile(downloadLink, outputDirectory, fileNameForFile, "pdf");
         
         //Sleep to give time to download file
         const amountToSleep = generateDelayNumber();
