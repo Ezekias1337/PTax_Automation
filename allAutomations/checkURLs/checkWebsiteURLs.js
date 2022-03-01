@@ -22,10 +22,10 @@ const arrayOfFailedOperations = [];
 
 const checkForDeadLink = async (driver, item) => {
   try {
-    const deadLinkPage = await driver.findElement(
-      By.css(checkURLSelectors.deadLink)
+    await driver.wait(
+      until.elementLocated(By.css(checkURLSelectors.deadLink)),
+      5000
     );
-
     arrayOfFailedOperations.push(item);
     console.log(colors.red.bold(`${item.WebSite} is a dead link!`));
   } catch (error) {
