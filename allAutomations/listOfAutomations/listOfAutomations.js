@@ -1,8 +1,7 @@
 const assessmentNotices = require("../assessmentNotices/assessmentNotices");
 const changeMailingAddress = require("../changeMailingAddress/changeMailingAddresses");
 const checkRequests = require("../checkRequests/checkRequests");
-const checkAssessorURLs = require("../checkURLs/checkAssessorURLs");
-const checkCollectorURLs = require("../checkURLs/checkCollectorURLs");
+const checkWebsiteURLs = require("../checkURLs/checkWebsiteURLs");
 const paymentConfirmations = require("../paymentConfirmations/paymentConfirmations");
 const propertyPointOfContact = require("../propertyPointOfContact/propertyPointOfContact");
 const pullParcelInformationFromRealquest = require("../pullParcelInformationFromRealquest/pullParcelInformationFromRealquest");
@@ -109,18 +108,13 @@ const listOfAutomations = {
     name: "Update Parcel Names",
     WIP: true,
   },
-  checkAssessorWebsiteURLs: {
+  checkWebsiteURLs: {
     key: 9,
-    name: "Check all the links for Assessors",
-    WIP: true,
-  },
-  checkTaxCollectorWebsiteURLs: {
-    key: 10,
-    name: "Check all the links for Tax Collectors",
-    WIP: true,
+    name: "Check all the links for Assessors/Collectors",
+    function: checkWebsiteURLs,
   },
   pullParcelInformationFromRealquest: {
-    key: 11,
+    key: 10,
     name: "Pull parcel information from Realquest",
     WIP: true,
   },

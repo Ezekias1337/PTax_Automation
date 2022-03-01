@@ -6,8 +6,9 @@ const consoleLogLine = require("../general/consoleLogLine");
 const promptSelectAnAutomation = require("./individual/promptSelectAnAutomation");
 const promptForState = require("./individual/promptForState");
 const promptForSublocation = require("./individual/promptForSublocation");
-const listOfAutomations = require("../../allAutomations/listOfAutomations/listOfAutomations");
 const promptForOperation = require("./individual/promptForOperation");
+const listOfAutomations = require("../../allAutomations/listOfAutomations/listOfAutomations");
+
 
 const mainMenu = async () => {
   /* 
@@ -25,6 +26,14 @@ const mainMenu = async () => {
     objToArraySelectAutomation,
     selectedAutomationInput
   );
+
+  
+  /*   If the automation has a function at the root level, run it
+ 
+
+  if (selectedAutomation?.function) {
+    selectedAutomation.function();
+  } */
 
   /* 
     If the automation has a state to select, prompt the user, 
