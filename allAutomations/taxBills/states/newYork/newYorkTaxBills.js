@@ -274,8 +274,9 @@ const performDownload = async (state, sublocation, operation) => {
         }
 
         //Sleep to give time to download file
-        const amountToSleep = generateDelayNumber();
-        await driver.sleep(amountToSleep);
+        /* const amountToSleep = generateDelayNumber();
+        await driver.sleep(amountToSleep); */
+        await driver.sleep(5000);
 
         await driver.navigate().back();
         await driver.navigate().back();
@@ -295,7 +296,7 @@ const performDownload = async (state, sublocation, operation) => {
     await printAutomationReportToSheet(
       arrayOfSuccessfulOperations,
       arrayOfFailedOperations,
-      "../../../../output/"
+      "./output/"
     );
 
     console.log(

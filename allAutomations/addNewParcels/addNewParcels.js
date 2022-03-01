@@ -292,7 +292,7 @@ const addNewParcels = async () => {
     await printAutomationReportToSheet(
       arrayOfSuccessfulOperations,
       arrayOfFailedOperations,
-      "../../output/"
+      "./output/"
     );
 
     console.log(
