@@ -159,7 +159,7 @@ const performDownload = async (state, sublocation, operation) => {
         console.log(
           colors.magenta.bold(`Working on parcel: ${item.ParcelNumber}`)
         );
-        
+
         const boroughNumber = item.ParcelNumber.split("-")[0];
         const blockNumber = item.ParcelNumber.split("-")[1];
         const lotNumber = item.ParcelNumber.split("-")[2];
@@ -251,11 +251,28 @@ const performDownload = async (state, sublocation, operation) => {
           `Q${installmentNumber}: `,
           "contains"
         );
-        const downloadLinkChild = await driver.findElement(By.xpath(downloadLinkChildXPath))
-        const downloadLink = await downloadLinkChild.findElement(By.xpath("./../.."))
-        const fileNameForFile = `${item.CompanyName} ${item.EntityName} ${item.ParcelNumber}`
-        await saveLinkToFile(downloadLink, outputDirectory, fileNameForFile, "pdf");
-        
+        const downloadLinkChild = await driver.findElement(
+          By.xpath(downloadLinkChildXPath)
+        );
+        const downloadLink = await downloadLinkChild.findElement(
+          By.xpath("./../..")
+        );
+        const fileNameForFile = `${item.CompanyName} ${item.EntityName} ${item.ParcelNumber}`;
+        try {
+          await saveLinkToFile(
+            downloadLink,
+            outputDirectory,
+            fileNameForFile,
+            "pdf"
+          );
+        } catch (error) {
+          console.log(
+            colors.red.bold(`Failed for parcel: ${item.ParcelNumber}`)
+          );
+          consoleLogLine();
+          arrayOfFailedOperations.push(item);
+        }
+
         //Sleep to give time to download file
         const amountToSleep = generateDelayNumber();
         await driver.sleep(amountToSleep);
