@@ -13,12 +13,14 @@ const deleteInputFieldContents = require("../../../../functions/general/deleteIn
 const promptForInstallment = require("../../../../functions/userPrompts/individual/promptForInstallment");
 const promptOutputDirectory = require("../../../../functions/userPrompts/individual/promptOutputDirectory");
 const saveLinkToFile = require("../../../../functions/fileOperations/saveLinkToFile");
+const trimLeadingZeros = require("../../../../functions/general/trimLeadingZeros");
 const generateDelayNumber = require("../../../../functions/general/generateDelayNumber");
 const { nyTaxBillSite } = require("../../../../constants/urls");
 const {
   downloadTaxBillsColumns,
 } = require("../../../../dataValidation/spreadsheetColumns/allSpreadSheetColumns");
 const consoleLogLine = require("../../../../functions/general/consoleLogLine");
+const { elementLocated } = require("selenium-webdriver/lib/until");
 
 const taxWebsiteSelectors = {
   agreeBtn: "btAgree",
@@ -40,9 +42,25 @@ const taxWebsiteSelectors = {
   websiteMaintenanceWarner: `//b[contains(text(), 'We are currently conducting maintenance')]`,
   sideMenuTab: "sidemenu",
   propertyTaxBillsTab: `//span[contains(text(), 'Property Tax Bills')]`,
+  taxBillTable: "datalet_div_1",
 };
 const arrayOfSuccessfulOperations = [];
 const arrayOfFailedOperations = [];
+
+const checkForTaxBillTable = async (driver) => {
+  let continueExecution = false;
+
+  try {
+    const taxBillTableElement = await driver.wait(
+      until.elementLocated(By.id(taxWebsiteSelectors.taxBillTable)),
+      10000
+    );
+
+    continueExecution = true;
+  } catch (error) {}
+
+  return continueExecution;
+};
 
 const checkIfWebsiteUnderMaintenance = async (driver) => {
   try {
@@ -160,9 +178,15 @@ const performDownload = async (state, sublocation, operation) => {
           colors.magenta.bold(`Working on parcel: ${item.ParcelNumber}`)
         );
 
+        /* 
+          Some parcels have leading zeros in the block/lot numbers which cause them
+          to not be pulled up on the database. This remedies that.
+        */
         const boroughNumber = item.ParcelNumber.split("-")[0];
-        const blockNumber = item.ParcelNumber.split("-")[1];
-        const lotNumber = item.ParcelNumber.split("-")[2];
+        const blockNumberPreZerotrim = item.ParcelNumber.split("-")[1];
+        const blockNumber = trimLeadingZeros(blockNumberPreZerotrim);
+        const lotNumberPreZerotrim = item.ParcelNumber.split("-")[2];
+        const lotNumber = trimLeadingZeros(lotNumberPreZerotrim);
 
         if (boroughNumber === "1") {
           const burough1Element = await awaitElementLocatedAndReturn(
@@ -241,6 +265,26 @@ const performDownload = async (state, sublocation, operation) => {
         );
         await propertyTaxBillsTab.click();
         await driver.wait(until.urlContains("soa_docs"));
+
+        /* 
+          Before trying to download, need to check for the table element which contains the
+          links to ensure the script doesn't get stuck
+        */
+
+        const continueExecution = await checkForTaxBillTable(driver);
+
+        if (continueExecution === false) {
+          await driver.navigate().back();
+          await driver.navigate().back();
+          console.log(
+            colors.red.bold(
+              `Failed for parcel: ${item.ParcelNumber} Parcel found, but no tax bill in database`
+            )
+          );
+          consoleLogLine();
+          arrayOfFailedOperations.push(item);
+          continue;
+        }
 
         /* 
           Because of the way the DOM is structured, it's necessary to parse out the correct
