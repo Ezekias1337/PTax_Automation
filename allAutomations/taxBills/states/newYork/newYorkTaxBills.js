@@ -320,17 +320,25 @@ const performDownload = async (state, sublocation, operation) => {
         const downloadLink = await downloadLinkChild.findElement(
           By.xpath("./../..")
         );
+
         const fileNameForFile = `${item.CompanyName} ${item.EntityName} ${item.ParcelNumber}`;
-        try {
-          await saveLinkToFile(
-            downloadLink,
-            outputDirectory,
-            fileNameForFile,
-            "pdf"
-          );
-        } catch (error) {
+
+        const downloadSucceeded = await saveLinkToFile(
+          downloadLink,
+          outputDirectory,
+          fileNameForFile,
+          "pdf"
+        );
+
+        if (downloadSucceeded === true) {
           console.log(
-            colors.red.bold(`Failed for parcel: ${item.ParcelNumber}`)
+            colors.yellow.bold(
+              `Parcel: ${item.ParcelNumber} downloaded successfuly`
+            )
+          );
+        } else {
+          console.log(
+            colors.red.bold(`Parcel: ${item.ParcelNumber} failed to download`)
           );
           consoleLogLine();
           arrayOfFailedOperations.push(item);
