@@ -9,7 +9,7 @@ const saveLinkToFile = async (
 ) => {
   const anchorTagToDownloadHREF = await anchorTag.getAttribute("href");
   let downloadSucceeded = false;
-  const fileNameSpecialCharactersRemoved = fileName.replace(/[^a-zA-Z0-9 -]/g, "");
+  const fileNameSpecialCharactersRemoved = fileName.replace(/[^a-zA-Z0-9 -()]/g, "");
 
   try {
     await request
