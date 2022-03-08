@@ -21,7 +21,6 @@ const {
 } = require("../../../../dataValidation/spreadsheetColumns/allSpreadSheetColumns");
 const consoleLogLine = require("../../../../functions/general/consoleLogLine");
 
-
 const taxWebsiteSelectors = {
   agreeBtn: "btAgree",
   burough1:
@@ -249,6 +248,7 @@ const performDownload = async (state, sublocation, operation) => {
           taxWebsiteSelectors.blockInputField,
           "id"
         );
+        await deleteInputFieldContents(blockInputFieldElement);
         await blockInputFieldElement.sendKeys(blockNumber);
 
         const lotInputFieldElement = await awaitElementLocatedAndReturn(
@@ -256,6 +256,7 @@ const performDownload = async (state, sublocation, operation) => {
           taxWebsiteSelectors.lotInputField,
           "id"
         );
+        await deleteInputFieldContents(lotInputFieldElement);
         await lotInputFieldElement.sendKeys(lotNumber);
 
         const taxWebsiteSearchBtn = await awaitElementLocatedAndReturn(
