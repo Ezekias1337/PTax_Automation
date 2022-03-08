@@ -28,6 +28,11 @@ const listOfAutomations = {
         ],
       },
     ],
+    operations: [
+      { key: 1, name: "Data Entry" },
+      { key: 2, name: "Download Files" },
+      { key: 3, name: "Data Entry And Download Files" },
+    ],
   },
   changeMailingAddress: {
     key: 2,

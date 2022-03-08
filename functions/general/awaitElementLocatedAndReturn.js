@@ -19,7 +19,7 @@ const awaitElementLocatedAndReturn = async (driver, selector, method) => {
         break;
       case "name":
         await driver.wait(until.elementLocated(By.name(selector)));
-        elementToReturn = driver.findElement(By.className(selector));
+        elementToReturn = driver.findElement(By.name(selector));
         break;
       case "linkText":
         await driver.wait(until.elementLocated(By.linkText(selector)));

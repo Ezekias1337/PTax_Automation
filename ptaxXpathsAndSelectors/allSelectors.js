@@ -1,15 +1,13 @@
 const addNewAssessmentSelector = require("./individual/addNewAssessmentSelector");
 const checkBoxSelector = require("./individual/checkBoxSelector");
 const editDetailsSelector = require("./individual/editDetailsSelector");
-const {
-  userNameSelector,
-  passWordSelector,
-} = require("./individual/loginPageSelectors");
 const searchByAddressSelector = require("./individual/searchByAddressSelector");
 const searchByLocationSelector = require("./individual/searchByLocationSelector");
 const searchByParcelNumberSelector = require("./individual/searchByParcelNumberSelector");
 const searchByParcelOwnerSelector = require("./individual/searchByParcelOwnerSelector");
 const newParcelHeader = require("./individual/newParcelHeader");
+const reserveDocument = require("./individual/reserveDocument");
+const uploadDocument = require("./individual/uploadDocument");
 const navbarAppealsSelectors = require("./navbarDropdowns/navbarAppeals/navbarAppealsSelectors");
 const navbarDocumentsSelectors = require("./navbarDropdowns/navbarDocuments/navbarDocumentsSelectors");
 const navbarEditSelectors = require("./navbarDropdowns/navbarEdit/navbarEditSelectors");
@@ -20,6 +18,11 @@ const navbarPaymentsSelectors = require("./navbarDropdowns/navbarPayments/navbar
 const navbarReportsSelectors = require("./navbarDropdowns/navbarReports/navbarReportsSelectors");
 const navbarViewSelectors = require("./navbarDropdowns/navbarView/navbarViewSelectors");
 const addNewParcelsSelectors = require("./addNewParcelsSelectors/addNewParcelsSelectors");
+const assessmentNoticesSelectors = require("./assessmentNoticesSelectors/assessmentNoticesSelectors");
+const {
+  userNameSelector,
+  passWordSelector,
+} = require("./individual/loginPageSelectors");
 
 const allSelectors = {
   addNewAssessmentSelector,
@@ -32,6 +35,8 @@ const allSelectors = {
   searchByParcelNumberSelector,
   searchByParcelOwnerSelector,
   newParcelHeader,
+  reserveDocument,
+  uploadDocument,
   navbarAppealsSelectors,
   navbarDocumentsSelectors,
   navbarEditSelectors,
@@ -42,6 +47,7 @@ const allSelectors = {
   navbarReportsSelectors,
   navbarViewSelectors,
   addNewParcelsSelectors,
+  assessmentNoticesSelectors
 };
 
 module.exports = allSelectors;

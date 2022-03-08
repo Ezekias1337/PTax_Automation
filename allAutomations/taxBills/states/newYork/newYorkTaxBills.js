@@ -20,7 +20,7 @@ const {
   downloadTaxBillsColumns,
 } = require("../../../../dataValidation/spreadsheetColumns/allSpreadSheetColumns");
 const consoleLogLine = require("../../../../functions/general/consoleLogLine");
-const { elementLocated } = require("selenium-webdriver/lib/until");
+
 
 const taxWebsiteSelectors = {
   agreeBtn: "btAgree",

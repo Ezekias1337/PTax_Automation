@@ -1,17 +1,20 @@
-const buildDriver = require("../../functions/driver/buildDriver");
-const colors = require("colors");
+const newYorkAssessmentNotices = require("./states/newYork/newYorkAssessmentNotices");
 
-const assessmentNotices = async (sublocation) => {
+const assessmentNotices = async (state, city, operation) => {
   /* 
         Need to pick automation by using sublocation
     */
 
-  const driver = await buildDriver();
-  console.log(
-    colors.green.bold(
-      `Running assessment notice automation for: ${sublocation}`
-    )
-  );
+  switch (state) {
+    case "California":
+      // code block
+      break;
+    case "New York":
+      await newYorkAssessmentNotices(state, city, operation);
+      break;
+    default:
+    // code block
+  }
 };
 
 module.exports = assessmentNotices;

@@ -11,7 +11,6 @@ const promptOutputDirectory = async () => {
     "Enter the path to the location you would like to save the files in: "
   );
 
-  //const uploadDirectoryPreSlashCheck = await promptUploadOrScanDirectory();
   const slashChecker = outputDirectoryPreSlashCheck.charAt(
     outputDirectoryPreSlashCheck.length - 1
   );
