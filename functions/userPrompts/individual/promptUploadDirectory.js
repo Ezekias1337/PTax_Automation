@@ -9,7 +9,7 @@ const filePathIsRelative = require("../../general/consoleLogErrors/filePathIsRel
     SPACES IN THEM
 */
 
-const promptUploadOrScanDirectory = async () => {
+const promptUploadOrScanDirectory = async (uploadOrScan = "scan") => {
   console.log("\n");
   console.log(
     colors.yellow.bold("This automation requires uploading or scanning files.")
@@ -19,9 +19,17 @@ const promptUploadOrScanDirectory = async () => {
     colors.red.bold("Beware, this will not work if the filepath has spaces!")
   );
   console.log("\n");
-  const selectedUploadDirectory = prompt(
-    "Enter the filepath to the location of the file(s) to upload or scan: "
-  );
+
+  let promptText;
+  if (uploadOrScan === "scan") {
+    promptText =
+      "Enter the filepath to the location of the file(s) to check for spreadsheets: ";
+  } else if (uploadOrScan === "upload") {
+    promptText =
+      "Enter the filepath to the location of the file(s) to upload to PTax: ";
+  }
+
+  const selectedUploadDirectory = prompt(promptText);
 
   if (selectedUploadDirectory.includes(" ")) {
     filePathIncludesSpaces();
@@ -33,7 +41,12 @@ const promptUploadOrScanDirectory = async () => {
     filePathIsRelative();
   }
 
-  if (!(selectedUploadDirectory.includes("/") || selectedUploadDirectory.includes("\\"))) {
+  if (
+    !(
+      selectedUploadDirectory.includes("/") ||
+      selectedUploadDirectory.includes("\\")
+    )
+  ) {
     filePathDoesntContainSlashes();
   }
   return selectedUploadDirectory;

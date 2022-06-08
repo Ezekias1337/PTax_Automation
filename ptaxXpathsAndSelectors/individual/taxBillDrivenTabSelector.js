@@ -1,3 +1,3 @@
-const taxBillDrivenTabSelector = "/html/body/form/div[5]/ul/li[1]";
+const taxBillDrivenTabSelector = "//li[contains(text(), 'Tax Bill Driven')]"
 
 module.exports = taxBillDrivenTabSelector;

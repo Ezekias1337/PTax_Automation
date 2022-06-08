@@ -17,15 +17,15 @@ const uploadAssessment = async (
   await goToUploadDocumentPage(driver);
   await reserveNewDocument(driver);
   await chooseFileToUpload(driver, fileNameForFile, outputDirectory);
-  await driver.sleep(1000);
+  await driver.sleep(3000);
   await enterYear(driver, year);
-  await driver.sleep(1000);
+  await driver.sleep(3000);
   await selectAssessmentDropdown(driver, assessmentYearEnd);
-  await driver.sleep(1000);
+  await driver.sleep(3000);
   await selectDocType(driver, "Assessment Notice");
-  await driver.sleep(1000);
+  await driver.sleep(3000);
   await enterTitle(driver, "Online Annual");
-  await driver.sleep(1000);
+  await driver.sleep(3000);
   await clickSaveDocumentToPTAXButton(driver);
 };
 

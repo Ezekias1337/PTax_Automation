@@ -8,6 +8,7 @@ const searchByParcelOwnerSelector = require("./individual/searchByParcelOwnerSel
 const newParcelHeader = require("./individual/newParcelHeader");
 const reserveDocument = require("./individual/reserveDocument");
 const uploadDocument = require("./individual/uploadDocument");
+const taxBillDrivenTabSelector = require("./individual/taxBillDrivenTabSelector");
 const navbarAppealsSelectors = require("./navbarDropdowns/navbarAppeals/navbarAppealsSelectors");
 const navbarDocumentsSelectors = require("./navbarDropdowns/navbarDocuments/navbarDocumentsSelectors");
 const navbarEditSelectors = require("./navbarDropdowns/navbarEdit/navbarEditSelectors");
@@ -19,6 +20,7 @@ const navbarReportsSelectors = require("./navbarDropdowns/navbarReports/navbarRe
 const navbarViewSelectors = require("./navbarDropdowns/navbarView/navbarViewSelectors");
 const addNewParcelsSelectors = require("./addNewParcelsSelectors/addNewParcelsSelectors");
 const assessmentNoticesSelectors = require("./assessmentNoticesSelectors/assessmentNoticesSelectors");
+const taxBillSelectors = require("./taxBillSelectors/taxBillSelectors");
 const {
   userNameSelector,
   passWordSelector,
@@ -37,6 +39,7 @@ const allSelectors = {
   newParcelHeader,
   reserveDocument,
   uploadDocument,
+  taxBillDrivenTabSelector,
   navbarAppealsSelectors,
   navbarDocumentsSelectors,
   navbarEditSelectors,
@@ -47,7 +50,8 @@ const allSelectors = {
   navbarReportsSelectors,
   navbarViewSelectors,
   addNewParcelsSelectors,
-  assessmentNoticesSelectors
+  assessmentNoticesSelectors,
+  taxBillSelectors
 };
 
 module.exports = allSelectors;

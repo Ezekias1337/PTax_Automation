@@ -1,3 +1,3 @@
-const downloadTaxBillsColumns = ["EntityName", "ParcelNumber"];
+const downloadTaxBillsColumns = ["CompanyName", "EntityName", "ParcelNumber"];
 
 module.exports = downloadTaxBillsColumns;

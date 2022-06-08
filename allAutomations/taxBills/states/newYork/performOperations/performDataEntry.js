@@ -1,94 +1,83 @@
+//  Main Imports
+
 const colors = require("colors");
 const { until, By } = require("selenium-webdriver");
+const buildDriver = require("../../../../../functions/driver/buildDriver");
 const verifySpreadSheetColumnNames = require("../../../../../functions/fileOperations/verifySpreadSheetColumnNames");
 const handleColumnNameLogging = require("../../../../../functions/fileOperations/handleColumnNameLogging");
 const readSpreadsheetFile = require("../../../../../functions/fileOperations/readSpreadsheetFile");
 const logErrorMessageCatch = require("../../../../../functions/general/consoleLogErrors/logErrorMessageCatch");
-const promptLogin = require("../../../../../functions/userPrompts/individual/promptLogin");
-const loginToPTAX = require("../../../../../functions/pTaxSpecific/login/loginToPTAX");
-const swapToIFrameDefaultContent = require("../../../../../functions/pTaxSpecific/frameSwaps/swapToIFrameDefaultContent");
-const swapToIFrame0 = require("../../../../../functions/pTaxSpecific/frameSwaps/swapToIFrame0");
-const swapToIFrame1 = require("../../../../../functions/pTaxSpecific/frameSwaps/swapToIFrame1");
-const clickCheckMyPropertiesCheckBox = require("../../../../../functions/pTaxSpecific/clickCheckMyPropertiesCheckBox/clickCheckMyPropertiesCheckBox");
 const printAutomationReportToSheet = require("../../../../../functions/fileOperations/printAutomationReportToSheet");
-const openNewTab = require("../../../../../functions/tabSwapsAndHandling/openNewTab");
-const switchToPTaxTab = require("../../../../../functions/tabSwapsAndHandling/switchToPTaxTab");
-const switchToTaxWebsiteTab = require("../../../../../functions/tabSwapsAndHandling/switchToTaxWebsiteTab");
 const awaitElementLocatedAndReturn = require("../../../../../functions/general/awaitElementLocatedAndReturn");
 const closingAutomationSystem = require("../../../../../functions/general/closingAutomationSystem");
 const generateDynamicXPath = require("../../../../../functions/general/generateDynamicXPath");
 const deleteInputFieldContents = require("../../../../../functions/general/deleteInputFieldContents");
-const promptForYear = require("../../../../../functions/userPrompts/individual/promptForYear");
-const promptOutputDirectory = require("../../../../../functions/userPrompts/individual/promptOutputDirectory");
+const promptForInstallment = require("../../../../../functions/userPrompts/individual/promptForInstallment");
+const promptLogin = require("../../../../../functions/userPrompts/individual/promptLogin");
+const promptUploadDirectory = require("../../../../../functions/userPrompts/individual/promptUploadDirectory");
+const loginToPTAX = require("../../../../../functions/pTaxSpecific/login/loginToPTAX");
 const saveLinkToFile = require("../../../../../functions/fileOperations/saveLinkToFile");
 const trimLeadingZeros = require("../../../../../functions/general/trimLeadingZeros");
+const swapToIFrameDefaultContent = require("../../../../../functions/pTaxSpecific/frameSwaps/swapToIFrameDefaultContent");
+const swapToIFrame0 = require("../../../../../functions/pTaxSpecific/frameSwaps/swapToIFrame0");
+const swapToIFrame1 = require("../../../../../functions/pTaxSpecific/frameSwaps/swapToIFrame1");
+const clickCheckMyPropertiesCheckBox = require("../../../../../functions/pTaxSpecific/clickCheckMyPropertiesCheckBox/clickCheckMyPropertiesCheckBox");
+const openNewTab = require("../../../../../functions/tabSwapsAndHandling/openNewTab");
+const switchToPTaxTab = require("../../../../../functions/tabSwapsAndHandling/switchToPTaxTab");
+const switchToTaxWebsiteTab = require("../../../../../functions/tabSwapsAndHandling/switchToTaxWebsiteTab");
+const { nyTaxBillSite } = require("../../../../../constants/urls");
+const consoleLogLine = require("../../../../../functions/general/consoleLogLine");
 const generateDelayNumber = require("../../../../../functions/general/generateDelayNumber");
+const navigateToExistingAssessment = require("../../../../../functions/navigateToExistingAssessment/navigateToExistingAssessment");
 const sendKeysPTaxInputFields = require("../../../../../functions/pTaxSpecific/sendKeysPTaxInputFields/sendKeysPTaxInputFields");
 const {
-  nyTaxBillSite,
-  ptaxHomePage,
-} = require("../../../../../constants/urls");
-const {
-  downloadAndDataEntryAssessmentNoticesColumns,
+  dataEntryTaxBillsColumns,
 } = require("../../../../../dataValidation/spreadsheetColumns/allSpreadSheetColumns");
 const {
   assessmentNoticesSelectors,
   navbarDocumentsSelectors,
   searchByParcelNumberSelector,
+  taxBillSelectors
 } = require("../../../../../ptaxXpathsAndSelectors/allSelectors");
-const consoleLogLine = require("../../../../../functions/general/consoleLogLine");
-const clickNavbarMenu = require("../../../../../functions/pTaxSpecific/clickNavbar/clickNavbarMenu");
 
-const addAssessment = require("../helpers/addAssessment");
-const bblSearch = require("../helpers/bblSearch");
-const checkForNoticesOfPropertyValueTable = require("../helpers/checkForNoticesOfPropertyValueTable");
+// Helpers
+const checkForTaxBillTable = require("../helpers/checkForTaxBillTable");
 const checkIfNoResultsOrMultipleResults = require("../helpers/checkIfNoResultsOrMultipleResults");
 const checkIfSessionExpired = require("../helpers/checkIfSessionExpired");
 const checkIfWebsiteUnderMaintenance = require("../helpers/checkIfWebsiteUnderMaintenance");
-const downloadAssessment = require("../helpers/downloadAssessment");
-const pullAssessmentStrings = require("../helpers/pullAssessmentStrings");
-const uploadAssessment = require("../helpers/uploadAssessment");
+const pullTaxBillStrings = require("../helpers/pullTaxBillStrings");
+const bblSearch = require("../helpers/bblSearch");
+const fillOutLiability = require("../helpers/fillOutLiability");
+const fillOutPayments = require("../helpers/fillOutPayments");
 
-const assessmentWebsiteSelectors = {
-  agreeBtn: "btAgree",
-  burough1:
-    "/html/body/div/div[3]/section/div/form/table/tbody/tr/td/div/div/table[1]/tbody/tr[6]/td/table/tbody/tr[1]/td[2]/select/option[2]",
-  burough2:
-    "/html/body/div/div[3]/section/div/form/table/tbody/tr/td/div/div/table[1]/tbody/tr[6]/td/table/tbody/tr[1]/td[2]/select/option[3]",
-  burough3:
-    "/html/body/div/div[3]/section/div/form/table/tbody/tr/td/div/div/table[1]/tbody/tr[6]/td/table/tbody/tr[1]/td[2]/select/option[4]",
-  burough4:
-    "/html/body/div/div[3]/section/div/form/table/tbody/tr/td/div/div/table[1]/tbody/tr[6]/td/table/tbody/tr[1]/td[2]/select/option[5]",
-  burough5:
-    "/html/body/div/div[3]/section/div/form/table/tbody/tr/td/div/div/table[1]/tbody/tr[6]/td/table/tbody/tr[1]/td[2]/select/option[6]",
-  blockInputField: "inpTag",
-  lotInputField: "inpStat",
-  searchButton: "btSearch",
-  noParcelResultsFoundWarner:
-    "//p[contains(text(), 'Your search did not find any records.')]",
-  websiteMaintenanceWarner: `//b[contains(text(), 'We are currently conducting maintenance')]`,
-  sideMenuTab: "sidemenu",
-  noticesOfPropertyValueTab: `//span[contains(text(), 'Notices of Property Value')]`,
-  noticesOfPropertyValueTable: "datalet_div_1",
-  bblSearchBtn: "//span[contains(text(), 'BBL Search')]",
-  assessmentInformation: "Assessment Information",
-};
-const arrayOfSuccessfulOperations = [];
-const arrayOfFailedOperations = [];
+const performDataEntry = async (
+  state,
+  sublocation,
+  operation,
+  taxWebsiteSelectors
+) => {
+  /* 
+      The bills must be already downloaded and on the local storage of the
+      PC to work (Network Drive won't work)
+      
+      Goes to the NY Tax Bill website, visits the Account Balance Tab, then gets the
+      payment for the period under Account Balance Details section. Subsequently goes
+      to PTAX, performs the data entry, deletes the data from the other installments,
+      and finally uploads the PDF of the Bill 
+    */
 
-const performDataEntryAndDownload = async (state, sublocation, operation) => {
+  const arrayOfSuccessfulOperations = [];
+  const arrayOfFailedOperations = [];
+
   try {
-    console.log(`Running download Tax Bill automation: `);
+    console.log(`Running Tax Bill Data Entry Automation: `);
 
     const dataFromSpreadsheet = await readSpreadsheetFile();
-    const outputDirectory = await promptOutputDirectory();
-
-    const assessmentYear = await promptForYear();
-    const assessmentYearEnd = parseInt(assessmentYear) + 1;
-
+    const uploadDirectory = await promptUploadDirectory("upload");
+    const installmentNumber = await promptForInstallment();
     const [areCorrectSheetColumnsPresent, arrayOfMissingColumnNames] =
       verifySpreadSheetColumnNames(
-        downloadAndDataEntryAssessmentNoticesColumns,
+        dataEntryTaxBillsColumns,
         dataFromSpreadsheet[0]
       );
 
@@ -124,7 +113,7 @@ const performDataEntryAndDownload = async (state, sublocation, operation) => {
 
     const agreeBtnElement = await awaitElementLocatedAndReturn(
       driver,
-      assessmentWebsiteSelectors.agreeBtn,
+      taxWebsiteSelectors.agreeBtn,
       "id"
     );
     await agreeBtnElement.click();
@@ -135,43 +124,39 @@ const performDataEntryAndDownload = async (state, sublocation, operation) => {
           colors.magenta.bold(`Working on parcel: ${item.ParcelNumber}`)
         );
 
-        await checkIfSessionExpired(driver, assessmentWebsiteSelectors);
-        await bblSearch(driver, item, assessmentWebsiteSelectors);
+        // Pull data from tax website
+
+        await checkIfSessionExpired(driver, taxWebsiteSelectors);
+        await bblSearch(driver, item, taxWebsiteSelectors);
 
         const resultsNotPresent = await checkIfNoResultsOrMultipleResults(
           driver,
           item,
-          assessmentWebsiteSelectors
+          taxWebsiteSelectors,
+          arrayOfFailedOperations
         );
         if (resultsNotPresent === true) {
           continue;
         }
 
-        const fileNameForFile = await downloadAssessment(
-          driver,
-          item,
-          assessmentWebsiteSelectors,
-          outputDirectory,
-          assessmentYear
+        const fileNameForFile = `${item.CompanyName} ${item.EntityName} ${item.ParcelNumber}`;
+        const [installmentTotalString, installmentTotalInt] =
+          await pullTaxBillStrings(
+            driver,
+            taxWebsiteSelectors,
+            installmentNumber
+          );
+        const bblSearchBtn = driver.findElement(
+          By.xpath(taxWebsiteSelectors.bblSearchBtn)
         );
-
-        const [
-          landMarketValueString,
-          landAssessedValueString,
-          improvementMarketValueString,
-          improvementAssessedValueString,
-        ] = await pullAssessmentStrings(
-          driver,
-          assessmentWebsiteSelectors,
-          assessmentYear,
-          assessmentYearEnd
+        await bblSearchBtn.click();
+        await driver.wait(
+          until.urlContains("search/commonsearch.aspx?mode=persprop")
         );
-
-        await driver.navigate().back();
-        await driver.navigate().back();
-        await driver.navigate().back();
-
         await switchToPTaxTab(driver, ptaxWindow);
+
+        // Navigate to parcel in PTax
+
         await driver.navigate().refresh();
         await swapToIFrameDefaultContent(driver);
 
@@ -192,44 +177,42 @@ const performDataEntryAndDownload = async (state, sublocation, operation) => {
           item.ParcelNumber,
           "contains"
         );
-        const propertyToAddAssessment = await awaitElementLocatedAndReturn(
+        const propertyToAddTaxBill = await awaitElementLocatedAndReturn(
           driver,
           propertySideBarXPath,
           "xpath"
         );
-        await propertyToAddAssessment.click();
+        await propertyToAddTaxBill.click();
         await driver.sleep(2500);
 
         await swapToIFrame1(driver);
+        await navigateToExistingAssessment(driver);
 
-        await addAssessment(
-          driver,
-          assessmentNoticesSelectors,
-          assessmentYear,
-          landMarketValueString,
-          landAssessedValueString,
-          improvementMarketValueString,
-          improvementAssessedValueString
-        );
-        await uploadAssessment(
-          driver,
-          fileNameForFile,
-          assessmentYear,
-          assessmentYearEnd,
-          outputDirectory
-        );
+        // Fill out the input fields and save
+
+        await fillOutLiability(driver, taxBillSelectors, installmentTotalString, installmentTotalInt, installmentNumber);
+        await fillOutPayments(driver, taxBillSelectors, installmentTotalString, installmentTotalInt, installmentNumber);
+        
+        // Upload Document
+
+        // April did not want this for 85Jay Street/Trump Soho 6/8/2022, will add later
+        
+        // Reset to default
+
+        
+        await swapToIFrame0(driver);
         await switchToTaxWebsiteTab(driver, taxWebsiteWindow);
-
+        /* const amountToSleep = generateDelayNumber();
+        await driver.sleep(amountToSleep); */
+        
         arrayOfSuccessfulOperations.push(item);
         console.log(
           colors.green.bold(`Succeeded for parcel: ${item.ParcelNumber}`)
         );
-        const amountToSleep = generateDelayNumber();
-        await driver.sleep(amountToSleep);
         consoleLogLine();
       } catch (error) {
+        console.log("ERROR CAUSING ISSUES: ", error);
         console.log(colors.red.bold(`Failed for parcel: ${item.ParcelNumber}`));
-        console.log(error);
         consoleLogLine();
         arrayOfFailedOperations.push(item);
       }
@@ -244,7 +227,8 @@ const performDataEntryAndDownload = async (state, sublocation, operation) => {
     console.log(
       colors.blue.bold(
         `Reports have been generated for parcels that were added successful and unsuccessfuly, located in the output folder. Please check the 'Failed Operations' tab to verify if any results need manual review.`
-      )
+      ),
+      "\n"
     );
     await closingAutomationSystem();
   } catch (error) {
@@ -252,4 +236,4 @@ const performDataEntryAndDownload = async (state, sublocation, operation) => {
   }
 };
 
-module.exports = performDataEntryAndDownload;
+module.exports = performDataEntry;

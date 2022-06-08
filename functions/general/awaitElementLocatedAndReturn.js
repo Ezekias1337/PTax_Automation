@@ -1,6 +1,11 @@
 const { until, By } = require("selenium-webdriver");
 
-const awaitElementLocatedAndReturn = async (driver, selector, method) => {
+const awaitElementLocatedAndReturn = async (
+  driver,
+  selector,
+  method,
+  includeLogger = true
+) => {
   try {
     let elementToReturn;
 
@@ -42,8 +47,10 @@ const awaitElementLocatedAndReturn = async (driver, selector, method) => {
     }
     return elementToReturn;
   } catch (error) {
-    console.log("Failed to store element, check selector and method");
-    console.log(error, error.message);
+    if (includeLogger === true) {
+      console.log("Failed to store element, check selector and method");
+      console.log(error, error.message);
+    }
   }
 };
 

@@ -11,19 +11,16 @@ const saveLinkToFile = async (
   let downloadSucceeded = false;
   const fileNameSpecialCharactersRemoved = fileName.replace("*", "");
 
-  try {
-    await request
-      .get(anchorTagToDownloadHREF)
-      .pipe(
-        fs.createWriteStream(
-          `${outputDirectory}${fileNameSpecialCharactersRemoved}.${fileExtension}`
-        )
-      );
-    downloadSucceeded = true;
-  } catch (error) {
-    console.log("Error in individual file", error);
-  }
-
+  request
+    .get(anchorTagToDownloadHREF, { timeout: 20000 }, function (err) {
+      return downloadSucceeded;
+    })
+    .pipe(
+      fs.createWriteStream(
+        `${outputDirectory}${fileNameSpecialCharactersRemoved}.${fileExtension}`
+      )
+    );
+  downloadSucceeded = true;
   return downloadSucceeded;
 };
 
