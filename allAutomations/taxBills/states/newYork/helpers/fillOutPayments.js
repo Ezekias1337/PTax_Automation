@@ -7,8 +7,8 @@ const fillOutPayments = async (
   driver,
   selectors,
   installmentTotalString,
-  installmentTotalInt,
-  installmentNumber
+  installmentNumber,
+  twoOrFourInstallments = 4
 ) => {
   if (installmentNumber === "1") {
     const generatePaymentsBtn = await awaitElementLocatedAndReturn(
@@ -18,7 +18,7 @@ const fillOutPayments = async (
     );
     await generatePaymentsBtn.click();
     await waitForLoading(driver);
-    
+
     const finalPayment1 = await awaitElementLocatedAndReturn(
       driver,
       selectors.finalPayment1,
@@ -49,33 +49,35 @@ const fillOutPayments = async (
     );
     await deleteInputFieldContents(basePayment2);
 
-    const finalPayment3 = await awaitElementLocatedAndReturn(
-      driver,
-      selectors.finalPayment3,
-      "id"
-    );
-    await deleteInputFieldContents(finalPayment3);
-    
-    const basePayment3 = await awaitElementLocatedAndReturn(
-      driver,
-      selectors.basePayment3,
-      "id"
-    );
-    await deleteInputFieldContents(basePayment3);
-    
-    const finalPayment4 = await awaitElementLocatedAndReturn(
-      driver,
-      selectors.finalPayment4,
-      "id"
-    );
-    await deleteInputFieldContents(finalPayment4);
+    if (twoOrFourInstallments === 4) {
+      const finalPayment3 = await awaitElementLocatedAndReturn(
+        driver,
+        selectors.finalPayment3,
+        "id"
+      );
+      await deleteInputFieldContents(finalPayment3);
 
-    const basePayment4 = await awaitElementLocatedAndReturn(
-      driver,
-      selectors.basePayment4,
-      "id"
-    );
-    await deleteInputFieldContents(basePayment4);
+      const basePayment3 = await awaitElementLocatedAndReturn(
+        driver,
+        selectors.basePayment3,
+        "id"
+      );
+      await deleteInputFieldContents(basePayment3);
+
+      const finalPayment4 = await awaitElementLocatedAndReturn(
+        driver,
+        selectors.finalPayment4,
+        "id"
+      );
+      await deleteInputFieldContents(finalPayment4);
+
+      const basePayment4 = await awaitElementLocatedAndReturn(
+        driver,
+        selectors.basePayment4,
+        "id"
+      );
+      await deleteInputFieldContents(basePayment4);
+    }
 
     const btnSaveAllPayment = await awaitElementLocatedAndReturn(
       driver,

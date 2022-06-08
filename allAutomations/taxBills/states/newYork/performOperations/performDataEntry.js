@@ -190,8 +190,8 @@ const performDataEntry = async (
 
         // Fill out the input fields and save
 
-        await fillOutLiability(driver, taxBillSelectors, installmentTotalString, installmentTotalInt, installmentNumber);
-        await fillOutPayments(driver, taxBillSelectors, installmentTotalString, installmentTotalInt, installmentNumber);
+        const twoOrFourInstallments = await fillOutLiability(driver, taxBillSelectors, installmentTotalString);
+        await fillOutPayments(driver, taxBillSelectors, installmentTotalString, installmentNumber, twoOrFourInstallments);
         
         // Upload Document
 
