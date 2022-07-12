@@ -22,9 +22,6 @@ const waitForLoading = async (driver) => {
       "Failed to find loader after 60 seconds.",
       5000
     );
-    console.log(
-      colors.bold.green("Loader removed from DOM, proceeding with operation")
-    );
   } catch (error) {
     try {
       const hiddenLoaderElement = await awaitElementLocatedAndReturn(
@@ -33,12 +30,7 @@ const waitForLoading = async (driver) => {
         "id",
         false
       );
-      console.log(
-        colors.bold.green("Loader removed from DOM, proceeding with operation")
-      );
-    } catch (error) {
-      console.log(colors.bold.red("Unable to verify if PTax Finished Loading"));
-    }
+    } catch (error) {}
   }
 };
 

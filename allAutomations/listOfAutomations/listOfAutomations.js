@@ -7,6 +7,7 @@ const propertyPointOfContact = require("../propertyPointOfContact/propertyPointO
 const pullParcelInformationFromRealquest = require("../pullParcelInformationFromRealquest/pullParcelInformationFromRealquest");
 const taxBills = require("../taxBills/taxBills");
 const addNewParcels = require("../addNewParcels/addNewParcels");
+const updateParcelNames = require("../updateParcelNames/updateParcelNames");
 
 const listOfAutomations = {
   assessmentNotices: {
@@ -111,7 +112,7 @@ const listOfAutomations = {
   updateParcelNames: {
     key: 8,
     name: "Update Parcel Names",
-    WIP: true,
+    function: updateParcelNames,
   },
   checkWebsiteURLs: {
     key: 9,

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Ezekias1337/Selenium_Practice#readme",
   "dependencies": {
+    "capture-website": "^2.4.0",
     "colors": "^1.4.0",
     "prompt-sync": "^4.2.0",
     "request": "^2.88.2",

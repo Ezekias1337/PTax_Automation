@@ -15,6 +15,7 @@ const deleteInputFieldContents = require("../../../../../functions/general/delet
 const promptForInstallment = require("../../../../../functions/userPrompts/individual/promptForInstallment");
 const promptOutputDirectory = require("../../../../../functions/userPrompts/individual/promptOutputDirectory");
 const saveLinkToFile = require("../../../../../functions/fileOperations/saveLinkToFile");
+const generateDelayNumber = require("../../../../../functions/general/generateDelayNumber");
 const trimLeadingZeros = require("../../../../../functions/general/trimLeadingZeros");
 const { nyTaxBillSite } = require("../../../../../constants/urls");
 const {
@@ -90,14 +91,15 @@ const performDownload = async (
             If the script has been executing for a long time, the session times out and
             redirects to the homepage. This checks if this occurred, and if it has,
             then it will click the BBL Search button to proceed execution
-          */
+        */
 
         await checkIfSessionExpired(driver, taxWebsiteSelectors);
 
         /* 
             Some parcels have leading zeros in the block/lot numbers which cause them
             to not be pulled up on the database. This remedies that.
-          */
+        */
+
         const boroughNumber = item.ParcelNumber.split("-")[0];
         const blockNumberPreZerotrim = item.ParcelNumber.split("-")[1];
         const blockNumber = trimLeadingZeros(blockNumberPreZerotrim);
@@ -146,9 +148,11 @@ const performDownload = async (
           taxWebsiteSelectors.blockInputField,
           "id"
         );
+        await driver.sleep(5000);
         await deleteInputFieldContents(blockInputFieldElement);
         await blockInputFieldElement.sendKeys(blockNumber);
 
+        await driver.sleep(5000);
         const lotInputFieldElement = await awaitElementLocatedAndReturn(
           driver,
           taxWebsiteSelectors.lotInputField,
@@ -157,12 +161,14 @@ const performDownload = async (
         await deleteInputFieldContents(lotInputFieldElement);
         await lotInputFieldElement.sendKeys(lotNumber);
 
+        await driver.sleep(5000);
         const taxWebsiteSearchBtn = await awaitElementLocatedAndReturn(
           driver,
           taxWebsiteSelectors.searchButton,
           "id"
         );
 
+        await driver.sleep(5000);
         await taxWebsiteSearchBtn.click();
         const resultsNotPresent = await checkIfNoResultsOrMultipleResults(
           driver,
@@ -185,7 +191,7 @@ const performDownload = async (
         );
         await propertyTaxBillsTab.click();
         await driver.wait(until.urlContains("soa_docs"));
-
+        await driver.sleep(5000);
         /* 
             Before trying to download, need to check for the table element which contains the
             links to ensure the script doesn't get stuck
@@ -257,9 +263,8 @@ const performDownload = async (
         }
 
         //Sleep to give time to download file
-        /* const amountToSleep = generateDelayNumber();
-          await driver.sleep(amountToSleep); */
-        await driver.sleep(20000);
+        const amountToSleep = generateDelayNumber();
+        await driver.sleep(amountToSleep);
 
         await driver.navigate().back();
         await driver.navigate().back();

@@ -3,6 +3,7 @@ const downloadTaxBillsColumns = require("./individual/downloadTaxBillsColumns");
 const dataEntryTaxBillsColumns = require("./individual/dataEntryTaxbillsColumns");
 const checkWebsiteURLsColumns = require("./individual/checkWebsiteURLsColumns");
 const downloadAndDataEntryAssessmentNoticesColumns = require("./individual/downloadAndDataEntryAssessmentNoticesColumns");
+const renameParcelsColumns = require("./individual/renameParcelsColumns");
 
 
 const allSpreadSheetColumns = {
@@ -10,7 +11,8 @@ const allSpreadSheetColumns = {
   downloadTaxBillsColumns: downloadTaxBillsColumns,
   dataEntryTaxBillsColumns: dataEntryTaxBillsColumns,
   checkWebsiteURLsColumns: checkWebsiteURLsColumns,
-  downloadAndDataEntryAssessmentNoticesColumns: downloadAndDataEntryAssessmentNoticesColumns
+  downloadAndDataEntryAssessmentNoticesColumns: downloadAndDataEntryAssessmentNoticesColumns,
+  renameParcelsColumns: renameParcelsColumns
 };
 
 module.exports = allSpreadSheetColumns;
