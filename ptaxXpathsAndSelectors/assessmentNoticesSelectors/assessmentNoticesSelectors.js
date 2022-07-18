@@ -1,5 +1,5 @@
 const assessmentNoticesSelectors = {
-  btnNewAssessment: "btn_new_assessment",
+  btnNewAssessment: "Button2",
   startAssessmentBtn: "btnStart",
   assessmentSection: "AssessmentSection",
   landMarketValueInput: "tbMarketValueLand",

@@ -1,5 +1,4 @@
 const colors = require("colors");
-const { until, By } = require("selenium-webdriver");
 const verifySpreadSheetColumnNames = require("../../../../../functions/fileOperations/verifySpreadSheetColumnNames");
 const handleColumnNameLogging = require("../../../../../functions/fileOperations/handleColumnNameLogging");
 const readSpreadsheetFile = require("../../../../../functions/fileOperations/readSpreadsheetFile");
@@ -17,60 +16,43 @@ const switchToTaxWebsiteTab = require("../../../../../functions/tabSwapsAndHandl
 const awaitElementLocatedAndReturn = require("../../../../../functions/general/awaitElementLocatedAndReturn");
 const closingAutomationSystem = require("../../../../../functions/general/closingAutomationSystem");
 const generateDynamicXPath = require("../../../../../functions/general/generateDynamicXPath");
-const deleteInputFieldContents = require("../../../../../functions/general/deleteInputFieldContents");
 const promptForYear = require("../../../../../functions/userPrompts/individual/promptForYear");
 const promptOutputDirectory = require("../../../../../functions/userPrompts/individual/promptOutputDirectory");
-const saveLinkToFile = require("../../../../../functions/fileOperations/saveLinkToFile");
-const trimLeadingZeros = require("../../../../../functions/general/trimLeadingZeros");
 const generateDelayNumber = require("../../../../../functions/general/generateDelayNumber");
 const sendKeysPTaxInputFields = require("../../../../../functions/pTaxSpecific/sendKeysPTaxInputFields/sendKeysPTaxInputFields");
-const {
-  nyTaxBillSite,
-} = require("../../../../../constants/urls");
+const { losAngelesAssessmentSite } = require("../../../../../constants/urls");
 const {
   downloadAndDataEntryAssessmentNoticesColumns,
 } = require("../../../../../dataValidation/spreadsheetColumns/allSpreadSheetColumns");
 const {
   assessmentNoticesSelectors,
-  navbarDocumentsSelectors,
   searchByParcelNumberSelector,
 } = require("../../../../../ptaxXpathsAndSelectors/allSelectors");
 const consoleLogLine = require("../../../../../functions/general/consoleLogLine");
-const clickNavbarMenu = require("../../../../../functions/pTaxSpecific/clickNavbar/clickNavbarMenu");
-
 const addAssessment = require("../../../cross-state-helpers/addAssessment");
-const bblSearch = require("../helpers/bblSearch");
-const checkForNoticesOfPropertyValueTable = require("../helpers/checkForNoticesOfPropertyValueTable");
-const checkIfNoResultsOrMultipleResults = require("../helpers/checkIfNoResultsOrMultipleResults");
-const checkIfSessionExpired = require("../helpers/checkIfSessionExpired");
-const checkIfWebsiteUnderMaintenance = require("../helpers/checkIfWebsiteUnderMaintenance");
-const downloadAssessment = require("../helpers/downloadAssessment");
+const searchForParcel = require("../helpers/searchForParcel");
 const pullAssessmentStrings = require("../helpers/pullAssessmentStrings");
-const uploadAssessment = require("../../../cross-state-helpers/addAssessment");
+const uploadAssessment = require("../../../cross-state-helpers/uploadAssessment");
+const downloadAssessment = require("../helpers/downloadAssessment.js");
 
 const assessmentWebsiteSelectors = {
-  agreeBtn: "btAgree",
-  burough1:
-    "/html/body/div/div[3]/section/div/form/table/tbody/tr/td/div/div/table[1]/tbody/tr[6]/td/table/tbody/tr[1]/td[2]/select/option[2]",
-  burough2:
-    "/html/body/div/div[3]/section/div/form/table/tbody/tr/td/div/div/table[1]/tbody/tr[6]/td/table/tbody/tr[1]/td[2]/select/option[3]",
-  burough3:
-    "/html/body/div/div[3]/section/div/form/table/tbody/tr/td/div/div/table[1]/tbody/tr[6]/td/table/tbody/tr[1]/td[2]/select/option[4]",
-  burough4:
-    "/html/body/div/div[3]/section/div/form/table/tbody/tr/td/div/div/table[1]/tbody/tr[6]/td/table/tbody/tr[1]/td[2]/select/option[5]",
-  burough5:
-    "/html/body/div/div[3]/section/div/form/table/tbody/tr/td/div/div/table[1]/tbody/tr[6]/td/table/tbody/tr[1]/td[2]/select/option[6]",
-  blockInputField: "inpTag",
-  lotInputField: "inpStat",
-  searchButton: "btSearch",
-  noParcelResultsFoundWarner:
-    "//p[contains(text(), 'Your search did not find any records.')]",
-  websiteMaintenanceWarner: `//b[contains(text(), 'We are currently conducting maintenance')]`,
-  sideMenuTab: "sidemenu",
-  noticesOfPropertyValueTab: `//span[contains(text(), 'Notices of Property Value')]`,
-  noticesOfPropertyValueTable: "datalet_div_1",
-  bblSearchBtn: "//span[contains(text(), 'BBL Search')]",
-  assessmentInformation: "Assessment Information",
+  searchBar: "/html/body/div[1]/div[2]/div/form[1]/div/input",
+  landMarketValue:
+    "body > div.body-content.ng-scope > div > section.panel.panel-secondary.ng-scope.summary > div.panel-body.ng-scope > div > div > div.col-lg-7.info > div.table-responsive.info-section.info-section-taxvalue > table > tbody > tr:nth-child(1) > td:nth-child(2) > span",
+  improvementMarketValue:
+    "body > div.body-content.ng-scope > div > section.panel.panel-secondary.ng-scope.summary > div.panel-body.ng-scope > div > div > div.col-lg-7.info > div.table-responsive.info-section.info-section-taxvalue > table > tbody > tr:nth-child(2) > td:nth-child(2) > span",
+  summary:
+    "body > div > div > section.panel.panel-secondary.ng-scope.summary > div.panel-body.ng-scope > div > div > div.col-lg-7.info",
+  buildingsLandCharacteristics:
+    "body > div.body-content.ng-scope > div > section.panel.panel-secondary.ng-scope.buildingland",
+  eventsHistory:
+    "body > div.body-content.ng-scope > div > section.panel.panel-secondary.ng-scope.eventshistory",
+  assessmentHistory:
+    "body > div.body-content.ng-scope > div > section.panel.panel-secondary.ng-scope.assessment",
+  paginationElement:
+    "body > div.body-content.ng-scope > div > section.panel.panel-secondary.ng-scope.assessment > div.panel-body.ng-scope > div > div:nth-child(3)",
+  loader: "//h3[contains(text(), 'Loading')]",
+  btnNewAssessment: "Button2"
 };
 const arrayOfSuccessfulOperations = [];
 const arrayOfFailedOperations = [];
@@ -113,62 +95,41 @@ const performDataEntryAndDownload = async () => {
     await clickCheckMyPropertiesCheckBox(driver);
 
     await openNewTab(driver);
-    await driver.get(nyTaxBillSite);
+    await driver.get(losAngelesAssessmentSite);
     const taxWebsiteWindow = await driver.getWindowHandle();
-
-    const maintenanceStatus = await checkIfWebsiteUnderMaintenance(driver);
-    if (maintenanceStatus === true) {
-      throw "Website Under Maintenance";
-    }
-
-    const agreeBtnElement = await awaitElementLocatedAndReturn(
-      driver,
-      assessmentWebsiteSelectors.agreeBtn,
-      "id"
-    );
-    await agreeBtnElement.click();
 
     for (const item of dataFromSpreadsheet) {
       try {
         console.log(
           colors.magenta.bold(`Working on parcel: ${item.ParcelNumber}`)
         );
+        await driver.get(losAngelesAssessmentSite);
+        await searchForParcel(driver, item, assessmentWebsiteSelectors);
 
-        await checkIfSessionExpired(driver, assessmentWebsiteSelectors);
-        await bblSearch(driver, item, assessmentWebsiteSelectors);
-
-        const resultsNotPresent = await checkIfNoResultsOrMultipleResults(
-          driver,
-          item,
-          assessmentWebsiteSelectors
-        );
-        if (resultsNotPresent === true) {
+        //Handle error if parcel isn't brough up directly
+        let currentUrl = await driver.getCurrentUrl();
+        if (currentUrl.includes("/?b=")) {
+          arrayOfFailedOperations.push(item);
           continue;
         }
 
         const fileNameForFile = await downloadAssessment(
-          driver,
           item,
-          assessmentWebsiteSelectors,
           outputDirectory,
-          assessmentYear
-        );
-
-        const [
-          landMarketValueString,
-          landAssessedValueString,
-          improvementMarketValueString,
-          improvementAssessedValueString,
-        ] = await pullAssessmentStrings(
           driver,
-          assessmentWebsiteSelectors,
-          assessmentYear,
-          assessmentYearEnd
+          assessmentWebsiteSelectors
         );
 
-        await driver.navigate().back();
-        await driver.navigate().back();
-        await driver.navigate().back();
+        if (fileNameForFile === null) {
+          arrayOfFailedOperations.push(item);
+          console.log(
+            colors.red.bold(`Failed for parcel: ${item.ParcelNumber}`)
+          );
+          continue;
+        }
+
+        const [landMarketValueString, improvementMarketValueString] =
+          await pullAssessmentStrings(driver, assessmentWebsiteSelectors);
 
         await switchToPTaxTab(driver, ptaxWindow);
         await driver.navigate().refresh();
@@ -198,7 +159,6 @@ const performDataEntryAndDownload = async () => {
         );
         await propertyToAddAssessment.click();
         await driver.sleep(2500);
-
         await swapToIFrame1(driver);
 
         await addAssessment(
@@ -206,9 +166,9 @@ const performDataEntryAndDownload = async () => {
           assessmentNoticesSelectors,
           assessmentYear,
           landMarketValueString,
-          landAssessedValueString,
+          null,
           improvementMarketValueString,
-          improvementAssessedValueString
+          null
         );
         await uploadAssessment(
           driver,

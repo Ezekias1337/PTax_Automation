@@ -1,15 +1,15 @@
 const { until, By } = require("selenium-webdriver");
-const awaitElementLocatedAndReturn = require("../../../../../functions/general/awaitElementLocatedAndReturn");
-const generateDynamicXPath = require("../../../../../functions/general/generateDynamicXPath");
+const awaitElementLocatedAndReturn = require("../../../functions/general/awaitElementLocatedAndReturn");
+const generateDynamicXPath = require("../../../functions/general/generateDynamicXPath");
 
 const addAssessment = async (
   driver,
   assessmentNoticesSelectors,
   assessmentYear,
   landMarketValueString,
-  landAssessedValueString,
+  landAssessedValueString = null,
   improvementMarketValueString,
-  improvementAssessedValueString
+  improvementAssessedValueString = null
 ) => {
   // Do data entry
 
@@ -59,7 +59,11 @@ const addAssessment = async (
     assessmentNoticesSelectors.landAssessedValueInput,
     "name"
   );
-  await landAssessedValueInputField.sendKeys(landAssessedValueString);
+  if (landAssessedValueString !== null) {
+    await landAssessedValueInputField.sendKeys(landAssessedValueString);
+  } else {
+    await landAssessedValueInputField.sendKeys(landMarketValueString);
+  }
 
   const improvementsMarketValueInputField = await awaitElementLocatedAndReturn(
     driver,
@@ -70,15 +74,21 @@ const addAssessment = async (
     improvementMarketValueString
   );
 
-  const improvementsAssessedValueInputField =
-    await awaitElementLocatedAndReturn(
-      driver,
-      assessmentNoticesSelectors.improvementsAssessedValueInput,
-      "name"
-    );
-  await improvementsAssessedValueInputField.sendKeys(
-    improvementAssessedValueString
+  const improvementAssessedValueInputField = await awaitElementLocatedAndReturn(
+    driver,
+    assessmentNoticesSelectors.improvementsAssessedValueInput,
+    "name"
   );
+
+  if (improvementAssessedValueString !== null) {
+    await improvementAssessedValueInputField.sendKeys(
+      improvementAssessedValueString
+    );
+  } else {
+    await improvementAssessedValueInputField.sendKeys(
+      improvementMarketValueString
+    );
+  }
 
   const btnSaveAssessment = await awaitElementLocatedAndReturn(
     driver,

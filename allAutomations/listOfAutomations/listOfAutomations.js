@@ -28,6 +28,13 @@ const listOfAutomations = {
           { key: 1, name: "New York", function: assessmentNotices },
         ],
       },
+      {
+        key: 3,
+        state: "California",
+        subLocations: [
+          { key: 1, name: "Los Angeles", function: assessmentNotices },
+        ],
+      },
     ],
     operations: [
       { key: 1, name: "Data Entry" },
