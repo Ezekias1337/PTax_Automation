@@ -19,7 +19,8 @@ const downloadAssessment = async (
     driver,
     outputDirectory,
     fileNameForFile,
-    assessmentWebsiteSelectors.summary
+    assessmentWebsiteSelectors.summary,
+    true
   );
 
   if (downloadSucceeded === true) {

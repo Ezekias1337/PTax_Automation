@@ -34,6 +34,7 @@ const searchForParcel = require("../helpers/searchForParcel");
 const pullAssessmentStrings = require("../helpers/pullAssessmentStrings");
 const uploadAssessment = require("../../../cross-state-helpers/uploadAssessment");
 const downloadAssessment = require("../helpers/downloadAssessment.js");
+const switchToAndDismissAlert = require("../../../../../functions/tabSwapsAndHandling/switchToAndDismissAlert");
 
 const assessmentWebsiteSelectors = {
   searchBar: "/html/body/div[1]/div[2]/div/form[1]/div/input",
@@ -52,7 +53,7 @@ const assessmentWebsiteSelectors = {
   paginationElement:
     "body > div.body-content.ng-scope > div > section.panel.panel-secondary.ng-scope.assessment > div.panel-body.ng-scope > div > div:nth-child(3)",
   loader: "//h3[contains(text(), 'Loading')]",
-  btnNewAssessment: "Button2"
+  btnNewAssessment: "Button2",
 };
 const arrayOfSuccessfulOperations = [];
 const arrayOfFailedOperations = [];
@@ -103,6 +104,7 @@ const performDataEntryAndDownload = async () => {
         console.log(
           colors.magenta.bold(`Working on parcel: ${item.ParcelNumber}`)
         );
+        await switchToAndDismissAlert(driver);
         await driver.get(losAngelesAssessmentSite);
         await searchForParcel(driver, item, assessmentWebsiteSelectors);
 
@@ -130,6 +132,18 @@ const performDataEntryAndDownload = async () => {
 
         const [landMarketValueString, improvementMarketValueString] =
           await pullAssessmentStrings(driver, assessmentWebsiteSelectors);
+
+        if (
+          landMarketValueString === "0" &&
+          improvementMarketValueString === "0"
+        ) {
+          console.log(
+            colors.red.bold(
+              `Parcel: ${item.ParcelNumber} has 0 value for land and improvements. Skipping...`
+            )
+          );
+          throw "Value === 0";
+        }
 
         await switchToPTaxTab(driver, ptaxWindow);
         await driver.navigate().refresh();
