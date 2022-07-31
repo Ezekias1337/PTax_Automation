@@ -1,40 +1,42 @@
 const colors = require("colors");
-const verifySpreadSheetColumnNames = require("../../../../../functions/fileOperations/verifySpreadSheetColumnNames");
-const handleColumnNameLogging = require("../../../../../functions/fileOperations/handleColumnNameLogging");
-const readSpreadsheetFile = require("../../../../../functions/fileOperations/readSpreadsheetFile");
-const logErrorMessageCatch = require("../../../../../functions/general/consoleLogErrors/logErrorMessageCatch");
-const promptLogin = require("../../../../../functions/userPrompts/individual/promptLogin");
-const loginToPTAX = require("../../../../../functions/pTaxSpecific/login/loginToPTAX");
-const swapToIFrameDefaultContent = require("../../../../../functions/pTaxSpecific/frameSwaps/swapToIFrameDefaultContent");
-const swapToIFrame0 = require("../../../../../functions/pTaxSpecific/frameSwaps/swapToIFrame0");
-const swapToIFrame1 = require("../../../../../functions/pTaxSpecific/frameSwaps/swapToIFrame1");
-const clickCheckMyPropertiesCheckBox = require("../../../../../functions/pTaxSpecific/clickCheckMyPropertiesCheckBox/clickCheckMyPropertiesCheckBox");
-const printAutomationReportToSheet = require("../../../../../functions/fileOperations/printAutomationReportToSheet");
-const openNewTab = require("../../../../../functions/tabSwapsAndHandling/openNewTab");
-const switchToPTaxTab = require("../../../../../functions/tabSwapsAndHandling/switchToPTaxTab");
-const switchToTaxWebsiteTab = require("../../../../../functions/tabSwapsAndHandling/switchToTaxWebsiteTab");
-const awaitElementLocatedAndReturn = require("../../../../../functions/general/awaitElementLocatedAndReturn");
-const closingAutomationSystem = require("../../../../../functions/general/closingAutomationSystem");
-const generateDynamicXPath = require("../../../../../functions/general/generateDynamicXPath");
-const promptForYear = require("../../../../../functions/userPrompts/individual/promptForYear");
-const promptOutputDirectory = require("../../../../../functions/userPrompts/individual/promptOutputDirectory");
-const generateDelayNumber = require("../../../../../functions/general/generateDelayNumber");
-const sendKeysPTaxInputFields = require("../../../../../functions/pTaxSpecific/sendKeysPTaxInputFields/sendKeysPTaxInputFields");
-const { losAngelesAssessmentSite } = require("../../../../../constants/urls");
+const verifySpreadSheetColumnNames = require("../../../../../../../functions/fileOperations/verifySpreadSheetColumnNames");
+const handleColumnNameLogging = require("../../../../../../../functions/fileOperations/handleColumnNameLogging");
+const readSpreadsheetFile = require("../../../../../../../functions/fileOperations/readSpreadsheetFile");
+const logErrorMessageCatch = require("../../../../../../../functions/general/consoleLogErrors/logErrorMessageCatch");
+const promptLogin = require("../../../../../../../functions/userPrompts/individual/promptLogin");
+const loginToPTAX = require("../../../../../../../functions/pTaxSpecific/login/loginToPTAX");
+const swapToIFrameDefaultContent = require("../../../../../../../functions/pTaxSpecific/frameSwaps/swapToIFrameDefaultContent");
+const swapToIFrame0 = require("../../../../../../../functions/pTaxSpecific/frameSwaps/swapToIFrame0");
+const swapToIFrame1 = require("../../../../../../../functions/pTaxSpecific/frameSwaps/swapToIFrame1");
+const clickCheckMyPropertiesCheckBox = require("../../../../../../../functions/pTaxSpecific/clickCheckMyPropertiesCheckBox/clickCheckMyPropertiesCheckBox");
+const printAutomationReportToSheet = require("../../../../../../../functions/fileOperations/printAutomationReportToSheet");
+const openNewTab = require("../../../../../../../functions/tabSwapsAndHandling/openNewTab");
+const switchToPTaxTab = require("../../../../../../../functions/tabSwapsAndHandling/switchToPTaxTab");
+const switchToTaxWebsiteTab = require("../../../../../../../functions/tabSwapsAndHandling/switchToTaxWebsiteTab");
+const awaitElementLocatedAndReturn = require("../../../../../../../functions/general/awaitElementLocatedAndReturn");
+const closingAutomationSystem = require("../../../../../../../functions/general/closingAutomationSystem");
+const generateDynamicXPath = require("../../../../../../../functions/general/generateDynamicXPath");
+const promptForYear = require("../../../../../../../functions/userPrompts/individual/promptForYear");
+const promptOutputDirectory = require("../../../../../../../functions/userPrompts/individual/promptOutputDirectory");
+const generateDelayNumber = require("../../../../../../../functions/general/generateDelayNumber");
+const sendKeysPTaxInputFields = require("../../../../../../../functions/pTaxSpecific/sendKeysPTaxInputFields/sendKeysPTaxInputFields");
+const {
+  losAngelesAssessmentSite,
+} = require("../../../../../../../constants/urls");
 const {
   downloadAndDataEntryAssessmentNoticesColumns,
-} = require("../../../../../dataValidation/spreadsheetColumns/allSpreadSheetColumns");
+} = require("../../../../../../../dataValidation/spreadsheetColumns/allSpreadSheetColumns");
 const {
   assessmentNoticesSelectors,
   searchByParcelNumberSelector,
-} = require("../../../../../ptaxXpathsAndSelectors/allSelectors");
-const consoleLogLine = require("../../../../../functions/general/consoleLogLine");
-const addAssessment = require("../../../cross-state-helpers/addAssessment");
+} = require("../../../../../../../ptaxXpathsAndSelectors/allSelectors");
+const consoleLogLine = require("../../../../../../../functions/general/consoleLogLine");
+const addAssessment = require("../../../../../cross-state-helpers/addAssessment");
 const searchForParcel = require("../helpers/searchForParcel");
 const pullAssessmentStrings = require("../helpers/pullAssessmentStrings");
-const uploadAssessment = require("../../../cross-state-helpers/uploadAssessment");
+const uploadAssessment = require("../../../../../cross-state-helpers/uploadAssessment");
 const downloadAssessment = require("../helpers/downloadAssessment.js");
-const switchToAndDismissAlert = require("../../../../../functions/tabSwapsAndHandling/switchToAndDismissAlert");
+const switchToAndDismissAlert = require("../../../../../../../functions/tabSwapsAndHandling/switchToAndDismissAlert");
 
 const assessmentWebsiteSelectors = {
   searchBar: "/html/body/div[1]/div[2]/div/form[1]/div/input",

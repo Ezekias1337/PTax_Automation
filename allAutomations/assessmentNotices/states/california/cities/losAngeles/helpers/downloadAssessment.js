@@ -1,6 +1,6 @@
 const colors = require("colors");
-const consoleLogLine = require("../../../../../functions/general/consoleLogLine");
-const printPageToPDF = require("../../../../../functions/fileOperations/printPageToPDF");
+const consoleLogLine = require("../../../../../../../functions/general/consoleLogLine");
+const printPageToPDF = require("../../../../../../../functions/fileOperations/printPageToPDF");
 const { By, until } = require("selenium-webdriver");
 
 const downloadAssessment = async (

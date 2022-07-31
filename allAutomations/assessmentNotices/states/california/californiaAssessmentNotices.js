@@ -1,9 +1,21 @@
 const colors = require("colors");
-const performDataEntry = require("./performOperations/performDataEntry");
-const performDownload = require("./performOperations/performDownload");
-const performDataEntryAndDownload = require("./performOperations/performDataEntryAndDownload");
 
-const californiaAssessmentNotices = async (state, sublocation, operation) => {
+//Kern Imports
+const performDataEntryKern = require("./cities/kern/performOperations/performDataEntryKern");
+const performDownloadKern = require("./cities/kern/performOperations/performDownloadKern");
+const performDataEntryAndDownloadKern = require("./cities/kern/performOperations/performDataEntryAndDownloadKern");
+
+//Los Angeles Imports
+const performDataEntryLosAngeles = require("./cities/losAngeles/performOperations/performDataEntryLosAngeles");
+const performDownloadLosAngeles = require("./cities/losAngeles/performOperations/performDownloadLosAngeles");
+const performDataEntryAndDownloadLosAngeles = require("./cities/losAngeles/performOperations/performDataEntryAndDownloadLosAngeles");
+
+//San Diego Imports
+const performDataEntrySanDiego = require("./cities/sanDiego/performOperations/performDataEntrySanDiego");
+const performDownloadSanDiego = require("./cities/sanDiego/performOperations/performDownloadSanDiego");
+const performDataEntryAndDownloadSanDiego = require("./cities/sanDiego/performOperations/performDataEntryAndDownloadSanDiego");
+
+const californiaAssessmentNotices = async (sublocation, operation) => {
   console.log(
     colors.bold.red(
       "Warning: ensure the data in the Parcel Number column all follow the convention: "
@@ -16,14 +28,38 @@ const californiaAssessmentNotices = async (state, sublocation, operation) => {
 
   switch (operation) {
     case "Data Entry":
-      await performDataEntry();
-      return;
+      switch (sublocation) {
+        case "Kern":
+          await performDataEntryKern();
+        case "Los Angeles":
+          await performDataEntryLosAngeles();
+        case "San Diego":
+          await performDataEntrySanDiego();
+        default:
+          return;
+      }
     case "Download Files":
-      await performDownload();
-      break;
+      switch (sublocation) {
+        case "Kern":
+          await performDownloadKern();
+        case "Los Angeles":
+          await performDownloadLosAngeles();
+        case "San Diego":
+          await performDownloadSanDiego();
+        default:
+          return;
+      }
     case "Data Entry And Download Files":
-      await performDataEntryAndDownload();
-      return;
+      switch (sublocation) {
+        case "Kern":
+          await performDataEntryAndDownloadKern();
+        case "Los Angeles":
+          await performDataEntryAndDownloadLosAngeles();
+        case "San Diego":
+          await performDataEntryAndDownloadSanDiego();
+        default:
+          return;
+      }
     default:
       console.log("No operation found, check spelling of operation");
       return;

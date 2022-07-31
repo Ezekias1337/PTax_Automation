@@ -4,10 +4,10 @@ const californiaAssessmentNotices = require("./states/california/californiaAsses
 const assessmentNotices = async (state, city, operation) => {
   switch (state) {
     case "California":
-      await californiaAssessmentNotices(state, city, operation);
+      await californiaAssessmentNotices(city, operation);
       break;
     case "New York":
-      await newYorkAssessmentNotices(state, city, operation);
+      await newYorkAssessmentNotices(city, operation);
       break;
     default:
       break;

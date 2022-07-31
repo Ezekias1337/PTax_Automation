@@ -3,7 +3,7 @@ const performDataEntry = require("./performOperations/performDataEntry");
 const performDownload = require("./performOperations/performDownload");
 const performDataEntryAndDownload = require("./performOperations/performDataEntryAndDownload");
 
-const newYorkAssessmentNotices = async (state, sublocation, operation) => {
+const newYorkAssessmentNotices = async (sublocation, operation) => {
   console.log(
     colors.bold.red(
       "Warning: ensure the data in the Parcel Number column all follow the convention: "

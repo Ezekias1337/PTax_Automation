@@ -32,7 +32,9 @@ const listOfAutomations = {
         key: 3,
         state: "California",
         subLocations: [
-          { key: 1, name: "Los Angeles", function: assessmentNotices },
+          { key: 1, name: "Kern", function: assessmentNotices },
+          { key: 2, name: "Los Angeles", function: assessmentNotices },
+          { key: 3, name: "San Diego", function: assessmentNotices },
         ],
       },
     ],

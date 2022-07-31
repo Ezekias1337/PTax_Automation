@@ -1,4 +1,4 @@
-const awaitElementLocatedAndReturn = require("../../../../../functions/general/awaitElementLocatedAndReturn");
+const awaitElementLocatedAndReturn = require("../../../../../../../functions/general/awaitElementLocatedAndReturn");
 const { Key } = require("selenium-webdriver");
 
 const searchForParcel = async (driver, item, assessmentWebsiteSelectors) => {

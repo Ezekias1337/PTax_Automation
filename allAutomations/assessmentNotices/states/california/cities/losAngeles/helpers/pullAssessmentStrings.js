@@ -1,6 +1,4 @@
-const { until, By } = require("selenium-webdriver");
-const awaitElementLocatedAndReturn = require("../../../../../functions/general/awaitElementLocatedAndReturn");
-const generateDynamicXPath = require("../../../../../functions/general/generateDynamicXPath");
+const awaitElementLocatedAndReturn = require("../../../../../../../functions/general/awaitElementLocatedAndReturn");
 
 const pullAssessmentStrings = async (
   driver,
