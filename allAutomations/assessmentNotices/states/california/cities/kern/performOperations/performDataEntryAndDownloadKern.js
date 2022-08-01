@@ -20,9 +20,7 @@ const promptForYear = require("../../../../../../../functions/userPrompts/indivi
 const promptOutputDirectory = require("../../../../../../../functions/userPrompts/individual/promptOutputDirectory");
 const generateDelayNumber = require("../../../../../../../functions/general/generateDelayNumber");
 const sendKeysPTaxInputFields = require("../../../../../../../functions/pTaxSpecific/sendKeysPTaxInputFields/sendKeysPTaxInputFields");
-const {
-  losAngelesAssessmentSite,
-} = require("../../../../../../../constants/urls");
+const { kernAssessmentSite } = require("../../../../../../../constants/urls");
 const {
   downloadAndDataEntryAssessmentNoticesColumns,
 } = require("../../../../../../../dataValidation/spreadsheetColumns/allSpreadSheetColumns");
@@ -36,26 +34,25 @@ const searchForParcel = require("../helpers/searchForParcel");
 const pullAssessmentStrings = require("../helpers/pullAssessmentStrings");
 const uploadAssessment = require("../../../../../cross-state-helpers/uploadAssessment");
 const downloadAssessment = require("../helpers/downloadAssessment.js");
-const switchToAndDismissAlert = require("../../../../../../../functions/tabSwapsAndHandling/switchToAndDismissAlert");
+const fluentWait = require("../../../../../../../functions/general/fluentWait");
+const failedToHandleParcel = require("../../../../../../../functions/general/consoleLogErrors/failedToHandleParcel");
+const switchToTaxWebsiteIframe = require("../../../../../../../functions/tabSwapsAndHandling/switchToTaxWebsiteIframe");
+const pressNewSearch = require("../helpers/pressNewSearch");
 
 const assessmentWebsiteSelectors = {
-  searchBar: "/html/body/div[1]/div[2]/div/form[1]/div/input",
-  landMarketValue:
-    "body > div.body-content.ng-scope > div > section.panel.panel-secondary.ng-scope.summary > div.panel-body.ng-scope > div > div > div.col-lg-7.info > div.table-responsive.info-section.info-section-taxvalue > table > tbody > tr:nth-child(1) > td:nth-child(2) > span",
-  improvementMarketValue:
-    "body > div.body-content.ng-scope > div > section.panel.panel-secondary.ng-scope.summary > div.panel-body.ng-scope > div > div > div.col-lg-7.info > div.table-responsive.info-section.info-section-taxvalue > table > tbody > tr:nth-child(2) > td:nth-child(2) > span",
-  summary:
-    "body > div > div > section.panel.panel-secondary.ng-scope.summary > div.panel-body.ng-scope > div > div > div.col-lg-7.info",
-  buildingsLandCharacteristics:
-    "body > div.body-content.ng-scope > div > section.panel.panel-secondary.ng-scope.buildingland",
-  eventsHistory:
-    "body > div.body-content.ng-scope > div > section.panel.panel-secondary.ng-scope.eventshistory",
-  assessmentHistory:
-    "body > div.body-content.ng-scope > div > section.panel.panel-secondary.ng-scope.assessment",
-  paginationElement:
-    "body > div.body-content.ng-scope > div > section.panel.panel-secondary.ng-scope.assessment > div.panel-body.ng-scope > div > div:nth-child(3)",
-  loader: "//h3[contains(text(), 'Loading')]",
+  searchBar: "#txtSearchText",
+  searchByAPN: "//option[contains(text(), 'APN')]",
+  contentFrame: "#contentFrame",
+  tableForScraping: "#framedPageDiv > table",
+  confirmIsTaxTable:
+    "//b[contains(text(), 'Current tax roll values that are used')]",
+  landMarketValue: "//td[contains(text(), 'Land Value')]",
+  improvementMarketValue: "//td[contains(text(), 'Improvement Value')]",
+  newSearch: "a#lnkNewSearch",
   btnNewAssessment: "Button2",
+  divForScreenshot: "#framedPageDiv",
+  generalPropertyInfoTable:
+    "//b[contains(text(), 'General Property Information')]",
 };
 const arrayOfSuccessfulOperations = [];
 const arrayOfFailedOperations = [];
@@ -98,7 +95,7 @@ const performDataEntryAndDownload = async () => {
     await clickCheckMyPropertiesCheckBox(driver);
 
     await openNewTab(driver);
-    await driver.get(losAngelesAssessmentSite);
+    await driver.get(kernAssessmentSite);
     const taxWebsiteWindow = await driver.getWindowHandle();
 
     for (const item of dataFromSpreadsheet) {
@@ -106,14 +103,23 @@ const performDataEntryAndDownload = async () => {
         console.log(
           colors.magenta.bold(`Working on parcel: ${item.ParcelNumber}`)
         );
-        await switchToAndDismissAlert(driver);
-        await driver.get(losAngelesAssessmentSite);
+        await switchToTaxWebsiteIframe(
+          driver,
+          assessmentWebsiteSelectors.contentFrame,
+          "css"
+        );
         await searchForParcel(driver, item, assessmentWebsiteSelectors);
 
         //Handle error if parcel isn't brough up directly
-        let currentUrl = await driver.getCurrentUrl();
-        if (currentUrl.includes("/?b=")) {
-          arrayOfFailedOperations.push(item);
+        let parcelFoundSuccessfully = await fluentWait(
+          driver,
+          assessmentWebsiteSelectors.generalPropertyInfoTable,
+          "xpath",
+          10,
+          2
+        );
+        if (parcelFoundSuccessfully === false) {
+          failedToHandleParcel(arrayOfFailedOperations, item);
           continue;
         }
 
@@ -125,15 +131,14 @@ const performDataEntryAndDownload = async () => {
         );
 
         if (fileNameForFile === null) {
-          arrayOfFailedOperations.push(item);
-          console.log(
-            colors.red.bold(`Failed for parcel: ${item.ParcelNumber}`)
-          );
+          failedToHandleParcel(arrayOfFailedOperations, item);
           continue;
         }
 
         const [landMarketValueString, improvementMarketValueString] =
           await pullAssessmentStrings(driver, assessmentWebsiteSelectors);
+
+        await pressNewSearch(driver, assessmentWebsiteSelectors);
 
         if (
           landMarketValueString === "0" &&
@@ -151,17 +156,18 @@ const performDataEntryAndDownload = async () => {
         await driver.navigate().refresh();
         await swapToIFrameDefaultContent(driver);
 
-        const searchByParcelInput = await awaitElementLocatedAndReturn(
+        let searchByParcelInput = await awaitElementLocatedAndReturn(
           driver,
           searchByParcelNumberSelector,
           "id"
         );
+
         await sendKeysPTaxInputFields(
           searchByParcelInput,
           item.ParcelNumber,
           true
         );
-
+        
         await swapToIFrame0(driver);
         propertySideBarXPath = generateDynamicXPath(
           "a",
@@ -203,10 +209,8 @@ const performDataEntryAndDownload = async () => {
         await driver.sleep(amountToSleep);
         consoleLogLine();
       } catch (error) {
-        console.log(colors.red.bold(`Failed for parcel: ${item.ParcelNumber}`));
+        failedToHandleParcel(arrayOfFailedOperations, item);
         console.log(error);
-        consoleLogLine();
-        arrayOfFailedOperations.push(item);
       }
     }
 

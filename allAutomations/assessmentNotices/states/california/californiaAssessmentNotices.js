@@ -31,38 +31,50 @@ const californiaAssessmentNotices = async (sublocation, operation) => {
       switch (sublocation) {
         case "Kern":
           await performDataEntryKern();
+          break;
         case "Los Angeles":
           await performDataEntryLosAngeles();
+          break;
         case "San Diego":
           await performDataEntrySanDiego();
+          break;
         default:
-          return;
+          break;
       }
+      break;
     case "Download Files":
       switch (sublocation) {
         case "Kern":
           await performDownloadKern();
+          break;
         case "Los Angeles":
           await performDownloadLosAngeles();
+          break;
         case "San Diego":
           await performDownloadSanDiego();
+          break;
         default:
-          return;
+          break;
       }
+      break;
     case "Data Entry And Download Files":
       switch (sublocation) {
         case "Kern":
           await performDataEntryAndDownloadKern();
+          break;
         case "Los Angeles":
           await performDataEntryAndDownloadLosAngeles();
+          break;
         case "San Diego":
           await performDataEntryAndDownloadSanDiego();
+          break;
         default:
-          return;
+          break;
       }
+      break;
     default:
       console.log("No operation found, check spelling of operation");
-      return;
+      break;
   }
 };
 

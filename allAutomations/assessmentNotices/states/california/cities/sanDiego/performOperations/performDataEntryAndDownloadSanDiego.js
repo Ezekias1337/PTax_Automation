@@ -21,7 +21,7 @@ const promptOutputDirectory = require("../../../../../../../functions/userPrompt
 const generateDelayNumber = require("../../../../../../../functions/general/generateDelayNumber");
 const sendKeysPTaxInputFields = require("../../../../../../../functions/pTaxSpecific/sendKeysPTaxInputFields/sendKeysPTaxInputFields");
 const {
-  losAngelesAssessmentSite,
+  sanDiegoAssessmentSite,
 } = require("../../../../../../../constants/urls");
 const {
   downloadAndDataEntryAssessmentNoticesColumns,
@@ -98,7 +98,7 @@ const performDataEntryAndDownload = async () => {
     await clickCheckMyPropertiesCheckBox(driver);
 
     await openNewTab(driver);
-    await driver.get(losAngelesAssessmentSite);
+    await driver.get(sanDiegoAssessmentSite);
     const taxWebsiteWindow = await driver.getWindowHandle();
 
     for (const item of dataFromSpreadsheet) {
@@ -107,7 +107,6 @@ const performDataEntryAndDownload = async () => {
           colors.magenta.bold(`Working on parcel: ${item.ParcelNumber}`)
         );
         await switchToAndDismissAlert(driver);
-        await driver.get(losAngelesAssessmentSite);
         await searchForParcel(driver, item, assessmentWebsiteSelectors);
 
         //Handle error if parcel isn't brough up directly
