@@ -12,7 +12,7 @@ const clickCheckMyPropertiesCheckBox = require("../../functions/pTaxSpecific/cli
 const awaitElementLocatedAndReturn = require("../../functions/general/awaitElementLocatedAndReturn");
 const sendKeysPTaxInputFields = require("../../functions/pTaxSpecific/sendKeysPTaxInputFields/sendKeysPTaxInputFields");
 const generateDynamicXPath = require("../../functions/general/generateDynamicXPath");
-const waitForLoading = require("../../functions/pTaxSpecific/waitForLoading/waitForLoading");
+const generateDelayNumber = require("../../functions/general/generateDelayNumber");
 const printAutomationReportToSheet = require("../../functions/fileOperations/printAutomationReportToSheet");
 
 const {
@@ -61,6 +61,11 @@ const updateParcelNames = async () => {
     console.log(`Renaming parcel ${oldParcelName} => ${newParcelName}`);
 
     try {
+      /* 
+        Eventually Chrome will run out of memory depending on how long this is running for.
+        Refreshing the page will prevent the 'Aw, Snap!' error
+      */
+      await driver.navigate().refresh();
       await swapToIFrameDefaultContent(driver);
 
       const searchByParcelInput = await awaitElementLocatedAndReturn(
@@ -95,13 +100,20 @@ const updateParcelNames = async () => {
         taxBillDrivenTabSelector,
         "xpath"
       );
-      await taxBillDrivenTab.click();
+
+      const taxBillDrivenTabClassName = await taxBillDrivenTab.getAttribute(
+        "className"
+      );
+      if (taxBillDrivenTabClassName !== "selected") {
+        await taxBillDrivenTab.click();
+      }
 
       const editParcelNameButton = await awaitElementLocatedAndReturn(
         driver,
         editDetailsSelector,
         "xpath"
       );
+
       await editParcelNameButton.click();
 
       const parcelNumberInputField = await awaitElementLocatedAndReturn(
@@ -125,6 +137,8 @@ const updateParcelNames = async () => {
       arrayOfSuccessfulParcels.push(item);
       await swapToIFrameDefaultContent(driver);
       console.log("Parcel renamed successfully!");
+      const amountToSleep = generateDelayNumber();
+      await driver.sleep(amountToSleep);
       consoleLogLine();
     } catch (error) {
       arrayOfFailedParcels.push(item);
