@@ -1,4 +1,4 @@
-const performDownload = async (state, sublocation, operation) => {
+const performDownload = async () => {
   console.log("This operation is not yet available");
   return;
 };

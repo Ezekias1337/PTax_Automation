@@ -1,4 +1,4 @@
-const performDataEntry = async (state, sublocation, operation) => {
+const performDataEntry = async () => {
   console.log("This operation is not yet available");
   return;
 };

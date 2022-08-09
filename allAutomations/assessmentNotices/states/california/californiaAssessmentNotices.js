@@ -10,6 +10,11 @@ const performDataEntryLosAngeles = require("./cities/losAngeles/performOperation
 const performDownloadLosAngeles = require("./cities/losAngeles/performOperations/performDownloadLosAngeles");
 const performDataEntryAndDownloadLosAngeles = require("./cities/losAngeles/performOperations/performDataEntryAndDownloadLosAngeles");
 
+//Riverside Imports
+const performDataEntryRiverside = require("./cities/riverside/performOperations/performDataEntryRiverside");
+const performDownloadRiverside = require("./cities/riverside/performOperations/performDownloadRiverside");
+const performDataEntryAndDownloadRiverside = require("./cities/riverside/performOperations/performDataEntryAndDownloadRiverside");
+
 //San Diego Imports
 const performDataEntrySanDiego = require("./cities/sanDiego/performOperations/performDataEntrySanDiego");
 const performDownloadSanDiego = require("./cities/sanDiego/performOperations/performDownloadSanDiego");
@@ -35,6 +40,9 @@ const californiaAssessmentNotices = async (sublocation, operation) => {
         case "Los Angeles":
           await performDataEntryLosAngeles();
           break;
+        case "Riverside":
+          await performDataEntryRiverside();
+          break;
         case "San Diego":
           await performDataEntrySanDiego();
           break;
@@ -50,6 +58,9 @@ const californiaAssessmentNotices = async (sublocation, operation) => {
         case "Los Angeles":
           await performDownloadLosAngeles();
           break;
+        case "Riverside":
+          await performDownloadRiverside();
+          break;
         case "San Diego":
           await performDownloadSanDiego();
           break;
@@ -64,6 +75,9 @@ const californiaAssessmentNotices = async (sublocation, operation) => {
           break;
         case "Los Angeles":
           await performDataEntryAndDownloadLosAngeles();
+          break;
+        case "Riverside":
+          await performDataEntryAndDownloadRiverside();
           break;
         case "San Diego":
           await performDataEntryAndDownloadSanDiego();
