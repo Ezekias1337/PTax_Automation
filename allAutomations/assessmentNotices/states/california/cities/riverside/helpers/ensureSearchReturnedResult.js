@@ -1,5 +1,5 @@
 const fluentWait = require("../../../../../../../functions/general/fluentWait");
-const awaitElementLocatedAndReturn = require("../../../../../../../functions/general/awaitElementLocatedAndReturn");
+const { By } = require("selenium-webdriver");
 
 const ensureSearchReturnedResult = async (
   driver,

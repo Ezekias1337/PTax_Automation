@@ -38,7 +38,7 @@ const uploadAssessment = require("../../../../../cross-state-helpers/uploadAsses
 const downloadAssessment = require("../helpers/downloadAssessment");
 const fluentWait = require("../../../../../../../functions/general/fluentWait");
 const ensureSearchReturnedResult = require("../helpers/ensureSearchReturnedResult");
-const navigateToAssessmentData = require("../helpers/navigateToAssessmentData")
+const navigateToAssessmentData = require("../helpers/navigateToAssessmentData");
 
 const assessmentWebsiteSelectors = {
   searchBar: "tr-search-component input",
@@ -114,8 +114,18 @@ const performDataEntryAndDownload = async () => {
           arrayOfFailedOperations.push(item);
           continue;
         }
-        
-        await navigateToAssessmentData(driver, assessmentWebsiteSelectors)
+
+        const navigationSuccessful = await navigateToAssessmentData(
+          driver,
+          assessmentWebsiteSelectors
+        );
+        if (navigationSuccessful === false) {
+          arrayOfFailedOperations.push(item);
+          console.log(
+            colors.red.bold(`Failed for parcel: ${item.ParcelNumber}`)
+          );
+          continue;
+        }
 
         const fileNameForFile = await downloadAssessment(
           item,
