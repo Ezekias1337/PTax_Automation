@@ -13,10 +13,10 @@ const loginToPTAX = async (username, password) => {
     let driver = await buildDriver();
     let ptaxWindow = await driver.getWindowHandle();
     await driver.get(ptaxLoginPage);
-    await driver.findElement(By.name(userNameSelector)).sendKeys(username);
-    await driver
-      .findElement(By.name(passWordSelector))
-      .sendKeys(password, Key.RETURN);
+    const usernameInput = await driver.findElement(By.name(userNameSelector));
+    await usernameInput.sendKeys(username);
+    const paswordInput = await driver.findElement(By.name(passWordSelector));
+    await paswordInput.sendKeys(password, Key.RETURN);
 
     try {
       const alertText = await swapToAndDismissAlert(driver);
