@@ -15,6 +15,11 @@ const performDataEntryRiverside = require("./cities/riverside/performOperations/
 const performDownloadRiverside = require("./cities/riverside/performOperations/performDownloadRiverside");
 const performDataEntryAndDownloadRiverside = require("./cities/riverside/performOperations/performDataEntryAndDownloadRiverside");
 
+//San Bernardino Imports
+const performDataEntrySanBernardino = require("./cities/sanBernardino/performOperations/performDataEntrySanBernardino");
+const performDownloadSanBernardino = require("./cities/sanBernardino/performOperations/performDownloadSanBernardino");
+const performDataEntryAndDownloadSanBernardino = require("./cities/sanBernardino/performOperations/performDataEntryAndDownloadSanBernardino");
+
 //San Diego Imports
 const performDataEntrySanDiego = require("./cities/sanDiego/performOperations/performDataEntrySanDiego");
 const performDownloadSanDiego = require("./cities/sanDiego/performOperations/performDownloadSanDiego");
@@ -43,6 +48,9 @@ const californiaAssessmentNotices = async (sublocation, operation) => {
         case "Riverside":
           await performDataEntryRiverside();
           break;
+        case "San Bernardino":
+          await performDataEntrySanBernardino();
+          break;
         case "San Diego":
           await performDataEntrySanDiego();
           break;
@@ -61,6 +69,9 @@ const californiaAssessmentNotices = async (sublocation, operation) => {
         case "Riverside":
           await performDownloadRiverside();
           break;
+        case "San Bernardino":
+          await performDownloadSanBernardino();
+          break;
         case "San Diego":
           await performDownloadSanDiego();
           break;
@@ -78,6 +89,9 @@ const californiaAssessmentNotices = async (sublocation, operation) => {
           break;
         case "Riverside":
           await performDataEntryAndDownloadRiverside();
+          break;
+        case "San Bernardino":
+          await performDataEntryAndDownloadSanBernardino();
           break;
         case "San Diego":
           await performDataEntryAndDownloadSanDiego();
