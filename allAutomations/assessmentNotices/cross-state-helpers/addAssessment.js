@@ -1,6 +1,7 @@
 const { until, By } = require("selenium-webdriver");
 const awaitElementLocatedAndReturn = require("../../../functions/general/awaitElementLocatedAndReturn");
 const generateDynamicXPath = require("../../../functions/general/generateDynamicXPath");
+const scrollElementIntoView = require("../../../functions/general/scrollElementIntoView");
 
 const addAssessment = async (
   driver,
@@ -95,6 +96,7 @@ const addAssessment = async (
     assessmentNoticesSelectors.btnSaveAssessment,
     "name"
   );
+  await scrollElementIntoView(driver, btnSaveAssessment);
   await btnSaveAssessment.click();
 };
 

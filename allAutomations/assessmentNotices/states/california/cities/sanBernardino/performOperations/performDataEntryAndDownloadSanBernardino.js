@@ -47,9 +47,10 @@ const assessmentWebsiteSelectors = {
   submitSearchBtn: "//button[contains(text(), 'Search')]",
   valueHistory: "//a[contains(text(), 'Roll Values History')]",
   valueHistoryTable: "#uniqName_7_7 > div.table-responsive > table",
-  divForScreenshot: "#form1",
+  divForScreenshot: "#uniqName_7_7",
   acceptDisclaimer: "//button[contains(text(), 'I accept')]",
   mapIframe: "#map-iframe",
+  searchFailedWarning: "//div[contains(text(), '0 - 0 of 0 results')]",
   btnNewAssessment: "Button2",
 };
 
@@ -112,13 +113,29 @@ const performDataEntryAndDownload = async () => {
         await searchForParcel(driver, item, assessmentWebsiteSelectors);
 
         //Handle error if parcel isn't brough up directly
-        const searchWasSuccessful = await ensureSearchReturnedResult(
+        let searchWasSuccessful = await ensureSearchReturnedResult(
           driver,
-          assessmentWebsiteSelectors
+          assessmentWebsiteSelectors,
+          searchForParcel,
+          item
         );
         if (searchWasSuccessful === false) {
-          arrayOfFailedOperations.push(item);
-          continue;
+          /* 
+            Sometimes the website fails to return results the first time you enter the parcel number.
+            The script retries, and if it fails a second time, it will treat it as a failed parcel.
+          */
+
+          await searchForParcel(driver, item, assessmentWebsiteSelectors);
+          searchWasSuccessful = await ensureSearchReturnedResult(
+            driver,
+            assessmentWebsiteSelectors,
+            searchForParcel,
+            item
+          );
+          if (searchWasSuccessful === false) {
+            arrayOfFailedOperations.push(item);
+            continue;
+          }
         }
 
         await navigateToAssessmentData(driver, assessmentWebsiteSelectors);

@@ -1,5 +1,4 @@
 const fluentWait = require("../../../../../../../functions/general/fluentWait");
-const awaitElementLocatedAndReturn = require("../../../../../../../functions/general/awaitElementLocatedAndReturn");
 
 const ensureSearchReturnedResult = async (
   driver,
@@ -7,21 +6,13 @@ const ensureSearchReturnedResult = async (
 ) => {
   let searchSuccessful;
 
-  try {
-    await fluentWait(
-      driver,
-      assessmentWebsiteSelectors.searchFailedWarning,
-      "xpath",
-      6,
-      2
-    );
-    const alertElement = await driver.findElement(
-      By.xpath(assessmentWebsiteSelectors.searchFailedWarning)
-    );
-    searchSuccessful = false;
-  } catch (error) {
-    searchSuccessful = true;
-  }
+  searchSuccessful = !(await fluentWait(
+    driver,
+    assessmentWebsiteSelectors.searchFailedWarning,
+    "xpath",
+    6,
+    2
+  ));
   return searchSuccessful;
 };
 
