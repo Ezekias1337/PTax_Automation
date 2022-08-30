@@ -95,7 +95,7 @@ const listOfAutomations = {
         key: 1,
         state: "California",
         subLocations: [
-          { key: 1, name: "Los Angeles [No Data Entry]", function: taxBills },
+          { key: 1, name: "Los Angeles", function: taxBills },
         ],
       },
       {
