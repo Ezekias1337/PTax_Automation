@@ -24,26 +24,35 @@ const pullTaxBillStrings = async (
   const assessmentTableArrayOfRows = await tableWithTaxBillData.findElements(
     By.css("tr")
   );
+
+  /* 
+    Need to pick the correct row based off the installment number
+  */
+
   let rowWithInstallmentInformation;
-  switch (installmentNumber) {
-    case "1":
-      rowWithInstallmentInformation = assessmentTableArrayOfRows[1];
+
+  for (const row of assessmentTableArrayOfRows) {
+    const arrayOfRowChildren = await row.findElements(By.css("td"));
+    const cellWithInstallmentString = arrayOfRowChildren[1];
+    const stringToCheck = await cellWithInstallmentString.getAttribute(
+      "innerText"
+    );
+
+    if (installmentNumber === stringToCheck) {
+      rowWithInstallmentInformation = row;
       break;
-    default:
-      console.log(
-        "Need to update pullTaxBillStrings.js to accomodate past first installment"
-      );
-      break;
+    }
   }
 
   const installmentRowTDs = await rowWithInstallmentInformation.findElements(
     By.css("td")
   );
   const tdWithTotal = installmentRowTDs[9];
-  const installmentTotalTD = await tdWithTotal.getAttribute("innerText")
+  const installmentTotalTD = await tdWithTotal.getAttribute("innerText");
   const installmentTotalString = installmentTotalTD.replace(/,/g, "");
   const installmentTotalInt = parseFloat(installmentTotalString);
-  
+  console.log([installmentTotalString, installmentTotalInt]);
+
   return [installmentTotalString, installmentTotalInt];
 };
 

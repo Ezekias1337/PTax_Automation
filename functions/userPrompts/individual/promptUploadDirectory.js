@@ -29,7 +29,7 @@ const promptUploadOrScanDirectory = async (uploadOrScan = "scan") => {
       "Enter the filepath to the location of the file(s) to upload to PTax: ";
   }
 
-  const selectedUploadDirectory = prompt(promptText);
+  let selectedUploadDirectory = prompt(promptText);
 
   if (selectedUploadDirectory.includes(" ")) {
     filePathIncludesSpaces();
@@ -49,6 +49,17 @@ const promptUploadOrScanDirectory = async (uploadOrScan = "scan") => {
   ) {
     filePathDoesntContainSlashes();
   }
+
+  /* 
+    Make sure there is a slash at the end of the string
+  */
+  let directoryStrLength = selectedUploadDirectory.length;
+  let selectedUploadDirectoryLastChar =
+    selectedUploadDirectory[directoryStrLength - 1];
+  if (selectedUploadDirectoryLastChar !== "/") {
+    selectedUploadDirectory = `${selectedUploadDirectory}/`;
+  }
+
   return selectedUploadDirectory;
 };
 

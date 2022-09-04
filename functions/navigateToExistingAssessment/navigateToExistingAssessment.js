@@ -1,6 +1,7 @@
 const { By } = require("selenium-webdriver");
 const allSelectors = require("../../ptaxXpathsAndSelectors/allSelectors");
 const awaitElementLocatedAndReturn = require("../general/awaitElementLocatedAndReturn");
+const scrollElementIntoView = require("../general/scrollElementIntoView");
 
 const navigateToExistingAssessment = async (driver) => {
   const taxBillDrivenTab = await awaitElementLocatedAndReturn(
@@ -29,6 +30,7 @@ const navigateToExistingAssessment = async (driver) => {
     );
 
     if (assessmentCellLinkInnerText.includes(currentYear)) {
+      await scrollElementIntoView(driver, assessmentCellLink);
       await assessmentCellLink.click();
       break;
     }

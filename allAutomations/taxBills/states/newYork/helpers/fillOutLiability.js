@@ -3,25 +3,32 @@ const waitForLoading = require("../../../../../functions/pTaxSpecific/waitForLoa
 const awaitElementLocatedAndReturn = require("../../../../../functions/general/awaitElementLocatedAndReturn");
 const sendKeysPTaxInputFields = require("../../../../../functions/pTaxSpecific/sendKeysPTaxInputFields/sendKeysPTaxInputFields");
 
-const fillOutLiability = async (driver, selectors, installmentTotalString) => {
-  const totalAmountLiabilityInput = await awaitElementLocatedAndReturn(
-    driver,
-    selectors.totalAmountLiability,
-    "id"
-  );
-  await sendKeysPTaxInputFields(
-    totalAmountLiabilityInput,
-    installmentTotalString,
-    false
-  );
+const fillOutLiability = async (
+  driver,
+  selectors,
+  installmentTotalString,
+  installmentNumber
+) => {
+  if (installmentNumber === "1") {
+    const totalAmountLiabilityInput = await awaitElementLocatedAndReturn(
+      driver,
+      selectors.totalAmountLiability,
+      "id"
+    );
+    await sendKeysPTaxInputFields(
+      totalAmountLiabilityInput,
+      installmentTotalString,
+      false
+    );
 
-  const saveLiabilityBtn = await awaitElementLocatedAndReturn(
-    driver,
-    selectors.saveLiability,
-    "id"
-  );
-  await saveLiabilityBtn.click();
-  await waitForLoading(driver);
+    const saveLiabilityBtn = await awaitElementLocatedAndReturn(
+      driver,
+      selectors.saveLiability,
+      "id"
+    );
+    await saveLiabilityBtn.click();
+    await waitForLoading(driver);
+  }
 
   const collectorDropdownEle = await awaitElementLocatedAndReturn(
     driver,

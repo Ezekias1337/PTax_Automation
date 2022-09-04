@@ -15,6 +15,7 @@ const deleteInputFieldContents = require("../../../../../functions/general/delet
 const promptForInstallment = require("../../../../../functions/userPrompts/individual/promptForInstallment");
 const promptLogin = require("../../../../../functions/userPrompts/individual/promptLogin");
 const promptUploadDirectory = require("../../../../../functions/userPrompts/individual/promptUploadDirectory");
+const promptForYear = require("../../../../../functions/userPrompts/individual/promptForYear");
 const loginToPTAX = require("../../../../../functions/pTaxSpecific/login/loginToPTAX");
 const saveLinkToFile = require("../../../../../functions/fileOperations/saveLinkToFile");
 const trimLeadingZeros = require("../../../../../functions/general/trimLeadingZeros");
@@ -29,6 +30,7 @@ const { nyTaxBillSite } = require("../../../../../constants/urls");
 const consoleLogLine = require("../../../../../functions/general/consoleLogLine");
 const generateDelayNumber = require("../../../../../functions/general/generateDelayNumber");
 const navigateToExistingAssessment = require("../../../../../functions/navigateToExistingAssessment/navigateToExistingAssessment");
+const uploadTaxBill = require("../../../cross-state-helpers/uploadTaxBill");
 const sendKeysPTaxInputFields = require("../../../../../functions/pTaxSpecific/sendKeysPTaxInputFields/sendKeysPTaxInputFields");
 const {
   dataEntryTaxBillsColumns,
@@ -37,7 +39,7 @@ const {
   assessmentNoticesSelectors,
   navbarDocumentsSelectors,
   searchByParcelNumberSelector,
-  taxBillSelectors
+  taxBillSelectors,
 } = require("../../../../../ptaxXpathsAndSelectors/allSelectors");
 
 // Helpers
@@ -75,6 +77,9 @@ const performDataEntry = async (
     const dataFromSpreadsheet = await readSpreadsheetFile();
     const uploadDirectory = await promptUploadDirectory("upload");
     const installmentNumber = await promptForInstallment();
+    const assessmentYear = await promptForYear();
+    const assessmentYearEnd = parseInt(assessmentYear) + 1;
+
     const [areCorrectSheetColumnsPresent, arrayOfMissingColumnNames] =
       verifySpreadSheetColumnNames(
         dataEntryTaxBillsColumns,
@@ -190,21 +195,37 @@ const performDataEntry = async (
 
         // Fill out the input fields and save
 
-        const twoOrFourInstallments = await fillOutLiability(driver, taxBillSelectors, installmentTotalString);
-        await fillOutPayments(driver, taxBillSelectors, installmentTotalString, installmentNumber, twoOrFourInstallments);
-        
+        const twoOrFourInstallments = await fillOutLiability(
+          driver,
+          taxBillSelectors,
+          installmentTotalString,
+          installmentNumber
+        );
+        await fillOutPayments(
+          driver,
+          taxBillSelectors,
+          installmentTotalString,
+          installmentNumber,
+          twoOrFourInstallments
+        );
+
         // Upload Document
 
-        // April did not want this for 85Jay Street/Trump Soho 6/8/2022, will add later
-        
+        await uploadTaxBill(
+          driver,
+          fileNameForFile,
+          assessmentYear,
+          assessmentYearEnd,
+          uploadDirectory
+        );
+
         // Reset to default
 
-        
         await swapToIFrame0(driver);
         await switchToTaxWebsiteTab(driver, taxWebsiteWindow);
         /* const amountToSleep = generateDelayNumber();
         await driver.sleep(amountToSleep); */
-        
+
         arrayOfSuccessfulOperations.push(item);
         console.log(
           colors.green.bold(`Succeeded for parcel: ${item.ParcelNumber}`)
